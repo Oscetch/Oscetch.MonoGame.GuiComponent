@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Oscetch.MonoGame.Camera.GL" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Extensions.GL" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Input.GL" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Math.GL" Version="1.0.0" />
+    <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

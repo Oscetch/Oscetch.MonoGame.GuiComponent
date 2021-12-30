@@ -1,0 +1,30 @@
+﻿<Window 
+    x:Class="Editor.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Editor" xmlns:usercontrols="clr-namespace:Editor.UserControls" 
+    xmlns:viewModels="clr-namespace:Editor.ViewModels"
+    mc:Ignorable="d"
+    Title="Editor" 
+    WindowStartupLocation="CenterScreen"
+    Width="800"
+    Height="480">
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <usercontrols:LeftPanelView Grid.Column="0"
+                                    LeftPanelViewModel="{Binding LeftPanelViewModel}" />
+        <usercontrols:EditorView Grid.Column="1"
+                                 EditorViewModel="{Binding EditorViewModel}"
+                                 HorizontalContentAlignment="Stretch" 
+                                 VerticalAlignment="Stretch" />
+    </Grid>
+</Window>

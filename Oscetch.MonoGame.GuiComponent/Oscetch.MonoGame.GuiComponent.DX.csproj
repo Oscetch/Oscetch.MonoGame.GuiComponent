@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Oscetch.MonoGame.Camera.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Extensions.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Input.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

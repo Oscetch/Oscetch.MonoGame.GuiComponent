@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
+    <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.0" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MonoGameContentReference Include="**\*.mgcb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Oscetch.MonoGame.GuiComponent\Oscetch.MonoGame.GuiComponent.DX.csproj" />
+  </ItemGroup>
+</Project>
