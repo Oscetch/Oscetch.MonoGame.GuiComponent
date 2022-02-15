@@ -1,19 +1,6 @@
-﻿using Editor.ViewModels;
-using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.UserControls
 {
@@ -27,33 +14,73 @@ namespace Editor.UserControls
             InitializeComponent();
         }
 
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value); 
+        }
+
+        public string Description 
+        { 
+            get => (string)GetValue(DescriptionProperty); 
+            set => SetValue(DescriptionProperty, value); 
+        }
+
+        public string PropertyValue 
+        { 
+            get => (string)GetValue(PropertyValueProperty); 
+            set => SetValue(PropertyValueProperty, value); 
+        }
+
         public string FileFilter 
         { 
             get => (string)GetValue(FileFilterProperty); 
             set => SetValue(FileFilterProperty, value);
         }
 
-        public TextPropertyControlViewModel TextControlViewModel
-        {
-            get => (TextPropertyControlViewModel)GetValue(TextControlViewModelProperty);
-            set => SetValue(TextControlViewModelProperty, value);
-        }
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(FilePropertyControl),
+            new PropertyMetadata(OnTitleChanged));
 
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(FilePropertyControl),
+            new PropertyMetadata(OnDescriptionChanged));
+
+        public static readonly DependencyProperty PropertyValueProperty = DependencyProperty.Register(
+            nameof(PropertyValue), typeof(string), typeof(FilePropertyControl),
+            new PropertyMetadata(OnPropertyValueChanged));
 
         public static readonly DependencyProperty FileFilterProperty =
             DependencyProperty.Register(nameof(FileFilter), typeof(string), typeof(FilePropertyControl));
 
-        public static readonly DependencyProperty TextControlViewModelProperty = DependencyProperty.Register(nameof(TextControlViewModel),
-            typeof(TextPropertyControlViewModel), typeof(FilePropertyControl), new PropertyMetadata(OnViewModelChanged));
-
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not FilePropertyControl view || e.NewValue is not TextPropertyControlViewModel viewModel)
+            if(d is not FilePropertyControl view)
             {
                 return;
             }
 
-            view.DataContext = viewModel;
+            view.FileTextBox.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not FilePropertyControl view)
+            {
+                return;
+            }
+
+            view.DescriptionTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not FilePropertyControl view)
+            {
+                return;
+            }
+
+            view.TitleTextBlock.Text = e.NewValue as string ?? string.Empty;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -67,7 +94,7 @@ namespace Editor.UserControls
 
             if (result.HasValue && result.Value)
             {
-                FileTextBox.Text = fileDialog.FileName;
+                PropertyValue = fileDialog.FileName;
             }
         }
     }

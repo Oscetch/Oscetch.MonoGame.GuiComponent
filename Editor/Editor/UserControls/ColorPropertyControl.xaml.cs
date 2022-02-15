@@ -1,18 +1,6 @@
-﻿using Editor.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.UserControls
 {
@@ -24,24 +12,74 @@ namespace Editor.UserControls
         public ColorPropertyControl()
         {
             InitializeComponent();
+            ColorPicker.ColorChanged += ColorPicker_ColorChanged;
         }
 
-        public ColorPropertyControlViewModel ColorControlViewModel
-        {
-            get => (ColorPropertyControlViewModel)GetValue(ColorControlViewModelProperty);
-            set => SetValue(ColorControlViewModelProperty, value);
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty); 
+            set => SetValue(TitleProperty, value); 
         }
 
-        public static readonly DependencyProperty ColorControlViewModelProperty = DependencyProperty.Register(nameof(ColorControlViewModel),
-            typeof(ColorPropertyControlViewModel), typeof(ColorPropertyControl), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public string Description 
+        { 
+            get => (string)GetValue(DescriptionProperty); 
+            set => SetValue(DescriptionProperty, value); 
+        }
+
+        public Color PropertyValue 
+        { 
+            get => (Color)GetValue(PropertyValueProperty); 
+            set => SetValue(PropertyValueProperty, value); 
+        }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(ColorPropertyControl),
+            new PropertyMetadata(OnTitleChanged));
+
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(ColorPropertyControl),
+            new PropertyMetadata(OnDescriptionChanged));
+
+        public static readonly DependencyProperty PropertyValueProperty = DependencyProperty.Register(
+            nameof(PropertyValue), typeof(Color), typeof(ColorPropertyControl),
+            new PropertyMetadata(OnPropertyValueChanged));
+
+        private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not ColorPropertyControl view || e.NewValue is not ColorPropertyControlViewModel viewModel)
+            if (d is not ColorPropertyControl view)
             {
                 return;
             }
 
-            view.DataContext = viewModel;
+            view.ColorPicker.SelectedColor = e.NewValue is Color newColor
+                ? newColor
+                : new Color();
+        }
+
+        private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not ColorPropertyControl view)
+            {
+                return;
+            }
+
+            view.DescriptionTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not ColorPropertyControl view)
+            {
+                return;
+            }
+
+            view.TitleTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private void ColorPicker_ColorChanged(object sender, RoutedEventArgs e)
+        {
+            PropertyValue = ColorPicker.SelectedColor;
         }
     }
 }

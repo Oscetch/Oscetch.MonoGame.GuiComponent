@@ -13,12 +13,18 @@
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <TextBlock Margin="5" Text="{Binding Title}" FontSize="20" TextWrapping="Wrap" x:Name="TitleTextBlock" />
-            <TextBlock Margin="5" Text="{Binding Description}" Grid.Row="1" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
+            <TextBlock Margin="5" FontSize="20" TextWrapping="Wrap" 
+                       Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                       x:Name="TitleTextBlock" />
+            <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" 
+                       Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                       x:Name="DescriptionTextBlock" />
             <TextBox Margin="5" 
-                     Grid.Row="2" 
-                     x:Name="ValueTextBox" 
-                     Text="{Binding PropertyValue}" />
+                     VerticalContentAlignment="Center"
+                     Grid.Row="2"
+                     Text="{Binding PropertyValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                     x:Name="ValueTextBox">
+            </TextBox>
         </Grid>
     </Border>
 </UserControl>

@@ -1,18 +1,7 @@
 ﻿using Editor.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.UserControls
 {
@@ -26,22 +15,64 @@ namespace Editor.UserControls
             InitializeComponent();
         }
 
-        public TextPropertyControlViewModel TextControlViewModel
-        {
-            get => (TextPropertyControlViewModel)GetValue(Vector2ControlViewModelProperty);
-            set => SetValue(Vector2ControlViewModelProperty, value);
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty); 
+            set => SetValue(TitleProperty, value); 
         }
 
-        public static readonly DependencyProperty Vector2ControlViewModelProperty = DependencyProperty.Register(nameof(TextControlViewModel),
-            typeof(TextPropertyControlViewModel), typeof(TextPropertyControl), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public string Description 
+        { 
+            get => (string)GetValue(DescriptionProperty); 
+            set => SetValue(DescriptionProperty, value); 
+        }
+
+        public string PropertyValue 
+        { 
+            get => (string)GetValue(PropertyValueProperty); 
+            set => SetValue(PropertyValueProperty, value); 
+        }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(TextPropertyControl),
+            new PropertyMetadata(OnTitleChanged));
+
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(TextPropertyControl),
+            new PropertyMetadata(OnDescriptionChanged));
+
+        public static readonly DependencyProperty PropertyValueProperty = DependencyProperty.Register(
+            nameof(PropertyValue), typeof(string), typeof(TextPropertyControl),
+            new PropertyMetadata(OnPropertyValueChanged));
+
+        private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not TextPropertyControl view || e.NewValue is not TextPropertyControlViewModel viewModel)
+            if (d is not TextPropertyControl view)
             {
                 return;
             }
 
-            view.DataContext = viewModel;
+            view.ValueTextBox.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not TextPropertyControl view)
+            {
+                return;
+            }
+
+            view.DescriptionTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not TextPropertyControl view)
+            {
+                return;
+            }
+
+            view.TitleTextBlock.Text = e.NewValue as string ?? string.Empty;
         }
     }
 }

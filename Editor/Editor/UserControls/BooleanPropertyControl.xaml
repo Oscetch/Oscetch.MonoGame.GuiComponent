@@ -13,11 +13,10 @@
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <TextBlock Margin="5" FontSize="20" Text="{Binding Title}" TextWrapping="Wrap" x:Name="TitleTextBlock" />
-            <TextBlock Margin="5" Grid.Row="1" Text="{Binding Description}" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
+            <TextBlock Margin="5" FontSize="20" TextWrapping="Wrap" x:Name="TitleTextBlock" />
+            <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
             <CheckBox VerticalAlignment="Center" 
-                      HorizontalAlignment="Left" 
-                      IsChecked="{Binding PropertyValue}"
+                      HorizontalAlignment="Left"
                       Margin="5" 
                       Grid.Row="2" 
                       x:Name="ValueCheckBox" />

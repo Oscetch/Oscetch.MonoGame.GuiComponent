@@ -1,4 +1,5 @@
 ﻿using Editor.ViewModels;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,22 +28,62 @@ namespace Editor.UserControls
             InitializeComponent();
         }
 
-        public Vector2PropertyControlViewModel Vector2ControlViewModel
-        {
-            get => (Vector2PropertyControlViewModel)GetValue(Vector2ControlViewModelProperty);
-            set => SetValue(Vector2ControlViewModelProperty, value);
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty); 
+            set => SetValue(TitleProperty, value); 
         }
 
-        public static readonly DependencyProperty Vector2ControlViewModelProperty = DependencyProperty.Register(nameof(Vector2ControlViewModel),
-            typeof(Vector2PropertyControlViewModel), typeof(Vector2PropertyControl), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public string Description 
+        { 
+            get => (string)GetValue(DescriptionProperty); 
+            set => SetValue(DescriptionProperty, value); 
+        }
+
+        public float PropertyXValue 
+        { 
+            get => (float)GetValue(PropertyXValueProperty); 
+            set => SetValue(PropertyXValueProperty, value); 
+        }
+
+        public float PropertyYValue 
         {
-            if (d is not Vector2PropertyControl view || e.NewValue is not Vector2PropertyControlViewModel viewModel)
+            get => (float)GetValue(PropertyYValueProperty); 
+            set => SetValue(PropertyYValueProperty, value); 
+        }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(Vector2PropertyControl),
+            new PropertyMetadata(OnTitleChanged));
+
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(Vector2PropertyControl),
+            new PropertyMetadata(OnDescriptionChanged));
+
+        public static readonly DependencyProperty PropertyXValueProperty = DependencyProperty.Register(
+            nameof(PropertyXValue), typeof(float), typeof(Vector2PropertyControl));
+
+        public static readonly DependencyProperty PropertyYValueProperty = DependencyProperty.Register(
+            nameof(PropertyYValue), typeof(float), typeof(Vector2PropertyControl));
+
+        private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not Vector2PropertyControl view)
             {
                 return;
             }
 
-            view.DataContext = viewModel;
+            view.DescriptionTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not Vector2PropertyControl view)
+            {
+                return;
+            }
+
+            view.TitleTextBlock.Text = e.NewValue as string ?? string.Empty;
         }
     }
 }

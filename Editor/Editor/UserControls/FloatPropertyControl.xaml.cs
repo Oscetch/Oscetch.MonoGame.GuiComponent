@@ -1,19 +1,7 @@
-﻿using Editor.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.UserControls
 {
@@ -27,22 +15,36 @@ namespace Editor.UserControls
             InitializeComponent();
         }
 
-        public FloatPropertyControlViewModel FloatControlViewModel
-        {
-            get => (FloatPropertyControlViewModel)GetValue(FloatControlViewModelProperty);
-            set => SetValue(FloatControlViewModelProperty, value);
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty); 
+            set => SetValue(TitleProperty, value); 
         }
 
-        public static readonly DependencyProperty FloatControlViewModelProperty = DependencyProperty.Register(nameof(FloatControlViewModel),
-            typeof(FloatPropertyControlViewModel), typeof(FloatPropertyControl), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is not FloatPropertyControl view || e.NewValue is not FloatPropertyControlViewModel viewModel)
-            {
-                return;
-            }
+        public string Description 
+        { 
+            get => (string)GetValue(DescriptionProperty); 
+            set => SetValue(DescriptionProperty, value); 
+        }
 
-            view.DataContext = viewModel;
+        public float PropertyValue 
+        { 
+            get => (float)GetValue(PropertyValueProperty); 
+            set => SetValue(PropertyValueProperty, value); 
+        }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(FloatPropertyControl), new PropertyMetadata());
+
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(FloatPropertyControl));
+
+        public static readonly DependencyProperty PropertyValueProperty = DependencyProperty.Register(
+            nameof(PropertyValue), typeof(float), typeof(FloatPropertyControl), new PropertyMetadata(0f), ValidationCallback);
+
+        private static bool ValidationCallback(object value)
+        {
+            return value is float;
         }
     }
 }

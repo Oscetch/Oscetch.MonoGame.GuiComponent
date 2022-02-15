@@ -1,18 +1,5 @@
-﻿using Editor.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Editor.UserControls
 {
@@ -24,24 +11,75 @@ namespace Editor.UserControls
         public BooleanPropertyControl()
         {
             InitializeComponent();
+            ValueCheckBox.Checked += ValueCheckBox_CheckedChanged;
+            ValueCheckBox.Unchecked += ValueCheckBox_CheckedChanged;
         }
 
-        public BooleanPropertyControlViewModel BooleanControlViewModel
-        {
-            get => (BooleanPropertyControlViewModel)GetValue(BooleanControlViewModelProperty);
-            set => SetValue(BooleanControlViewModelProperty, value);
+        public string Title 
+        { 
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
 
-        public static readonly DependencyProperty BooleanControlViewModelProperty = DependencyProperty.Register(nameof(BooleanControlViewModel),
-            typeof(BooleanPropertyControlViewModel), typeof(BooleanPropertyControl), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public string Description
         {
-            if (d is not BooleanPropertyControl view || e.NewValue is not BooleanPropertyControlViewModel viewModel)
+            get => (string)GetValue(DescriptionProperty);
+            set => SetValue(DescriptionProperty, value);
+        }
+
+        public bool PropertyValue
+        {
+            get => (bool)GetValue(PropertyValueProperty);
+            set => SetValue(PropertyValueProperty, value);
+        }
+
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
+            nameof(Title), typeof(string), typeof(BooleanPropertyControl),
+            new PropertyMetadata(OnTitleChanged));
+
+        public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
+            nameof(Description), typeof(string), typeof(BooleanPropertyControl),
+            new PropertyMetadata(OnDescriptionChanged));
+
+        public static readonly DependencyProperty PropertyValueProperty = DependencyProperty.Register(
+            nameof(PropertyValue), typeof(bool), typeof(BooleanPropertyControl),
+            new PropertyMetadata(OnPropertyValueChanged));
+
+        private static void OnPropertyValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not BooleanPropertyControl view)
             {
                 return;
             }
 
-            view.DataContext = viewModel;
+            view.ValueCheckBox.IsChecked = e.NewValue is bool isChecked 
+                ? isChecked 
+                : false;
+        }
+
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is not BooleanPropertyControl view)
+            {
+                return;
+            }
+
+            view.TitleTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private static void OnDescriptionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not BooleanPropertyControl view)
+            {
+                return;
+            }
+
+            view.DescriptionTextBlock.Text = e.NewValue as string ?? string.Empty;
+        }
+
+        private void ValueCheckBox_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            PropertyValue = ValueCheckBox.IsChecked ?? false;
         }
     }
 }

@@ -12,19 +12,32 @@
     Width="800"
     Height="480">
     <Window.DataContext>
-        <viewModels:MainWindowViewModel/>
+        <viewModels:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="4*" />
-        </Grid.ColumnDefinitions>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}" />
+                <MenuItem Header="_Load" Command="{Binding LoadCommand}" />
+                <MenuItem Header="_Test Canvas" Command="{Binding TestCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Script">
+                <MenuItem Header="_Create New" Command="{Binding CreateScriptCommand}" />
+                <MenuItem Header="_Edit" Command="{Binding EditScriptCommand}" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
 
-        <usercontrols:LeftPanelView Grid.Column="0"
+            <usercontrols:LeftPanelView Grid.Column="0"
                                     LeftPanelViewModel="{Binding LeftPanelViewModel}" />
-        <usercontrols:EditorView Grid.Column="1"
+            <usercontrols:EditorView Grid.Column="1"
                                  EditorViewModel="{Binding EditorViewModel}"
                                  HorizontalContentAlignment="Stretch" 
                                  VerticalAlignment="Stretch" />
-    </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

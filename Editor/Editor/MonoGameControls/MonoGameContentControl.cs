@@ -63,6 +63,12 @@ namespace Editor.MonoGameControls
             Mouse.AddMouseDownHandler(this, OnMouseDown);
             Mouse.AddMouseMoveHandler(this, OnMouseMove);
             Mouse.AddMouseWheelHandler(this, OnMouseWheel);
+            PreviewKeyDown += MonoGameContentControl_PreviewKeyDown;
+        }
+
+        private void MonoGameContentControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            e.Handled = true;
         }
 
         public static GraphicsDevice GraphicsDevice => _graphicsDeviceService?.GraphicsDevice;
@@ -120,6 +126,7 @@ namespace Editor.MonoGameControls
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
+            Keyboard.Focus(this);
             _viewModel?.OnMouseDown(this, e);
         }
 

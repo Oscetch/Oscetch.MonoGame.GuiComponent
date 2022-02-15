@@ -64,12 +64,20 @@ namespace Oscetch.MonoGame.GuiComponent
         public Vector2 Position
         {
             get => Parameters.Position;
-            set => Parameters.Position = value;
+            set 
+            { 
+                Parameters.Position = value;
+                UpdateBorder();
+            }
         }
         public Vector2 Size
         {
             get => Parameters.Size;
-            set => Parameters.Size = value;
+            set 
+            { 
+                Parameters.Size = value;
+                UpdateBorder();
+            }
         }
         public Color TextColor
         {
@@ -376,7 +384,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
             foreach (var child in Children)
             {
-                child.LoadContent(contentManager, graphicsDevice);
+                child.LoadContent(contentManager, graphicsDevice, resolution);
             }
 
             if (GameToGuiService == null)
@@ -386,7 +394,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
             foreach (var script in LoadedScripts)
             {
-                script.Initialize(this, contentManager, graphicsDevice);
+                script.Initialize(this, contentManager, graphicsDevice, GameToGuiService);
             }
         }
 
@@ -434,7 +442,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
             foreach (var script in LoadedScripts)
             {
-                script.Initialize(this, contentManager, graphicsDevice);
+                script.Initialize(this, contentManager, graphicsDevice, GameToGuiService);
             }
         }
 
@@ -454,21 +462,18 @@ namespace Oscetch.MonoGame.GuiComponent
             {
                 if (Parameters.CenterText)
                 {
-                    TextPosition = (SpriteFont.MeasureString(Text) * TextScale)
-                        .ToRectangle()
-                        .CenterOn(Bounds).Location
-                        .ToVector2();
+                    TextPosition = Bounds.Center.ToVector2();
                 }
 
                 spriteBatch.DrawString(SpriteFont, Text, TextPosition, TextColor,
-                    TextRotation, Vector2.Zero, TextScale, SpriteEffects.None, 0);
+                    TextRotation, SpriteFont.MeasureString(Text) / 2, TextScale, SpriteEffects.None, 0);
             }
 
             if (HasBorder && _borderLines.Count > 0 && BorderTexture != null)
             {
                 foreach (var line in _borderLines)
                 {
-                    DrawLine(line, spriteBatch);
+                    DrawLine(line, spriteBatch, cameraHandler);
                 }
             }
 
@@ -478,10 +483,10 @@ namespace Oscetch.MonoGame.GuiComponent
             }
         }
 
-        private void DrawLine(Line line, SpriteBatch spriteBatch)
+        private void DrawLine(Line line, SpriteBatch spriteBatch, CameraHandler cameraHandler)
         {
             spriteBatch.Draw(BorderTexture, line.MidPoint, null, BorderColor, line.GetAngleInRadians(), _borderLineOrigin,
-                    new Vector2(line.Length(), 1),
+                    new Vector2(line.Length(), 1 / cameraHandler.Scale),
                     SpriteEffects.None, 0);
         }
 
@@ -520,6 +525,15 @@ namespace Oscetch.MonoGame.GuiComponent
             }
         }
 
+        private void UpdateBorder()
+        {
+            if (HasBorder)
+            {
+                _borderLines.Clear();
+                _borderLines.AddRange(Bounds.ToLines());
+            }
+        }
+
         public void Update(GameTime gameTime, CameraHandler cameraHandler)
         {
             if (!IsEnabled)
@@ -527,12 +541,6 @@ namespace Oscetch.MonoGame.GuiComponent
                 return;
             }
             UpdateMouseOver();
-
-            if (HasBorder)
-            {
-                _borderLines.Clear();
-                _borderLines.AddRange(Bounds.ToLines());
-            }
 
             for (var i = 0; i < _children.Count; i++)
             {

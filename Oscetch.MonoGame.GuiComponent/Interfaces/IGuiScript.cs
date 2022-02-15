@@ -15,7 +15,7 @@ namespace Oscetch.MonoGame.GuiComponent.Interfaces
         void MouseEnter();
         void MouseExit();
         void Update(GameTime gameTime, CameraHandler cameraHandler);
-        void Initialize(GuiControl<T> control, ContentManager contentManager, GraphicsDevice graphicsDevice);
+        void Initialize(GuiControl<T> control, ContentManager contentManager, GraphicsDevice graphicsDevice, T gameToGuiService);
         DragAndDropItem OnDrag();
         bool TryDrop(DragAndDropItem dragAndDropItem);
     }

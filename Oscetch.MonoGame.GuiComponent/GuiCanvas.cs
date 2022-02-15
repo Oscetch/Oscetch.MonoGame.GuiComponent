@@ -126,12 +126,15 @@ namespace Oscetch.MonoGame.GuiComponent
 
         public void Draw(SpriteBatch spriteBatch, CameraHandler cameraHandler)
         {
+            spriteBatch.Begin(transformMatrix: cameraHandler.ViewMatrix);
+
             foreach (var control in Controls)
             {
                 control.Draw(spriteBatch, cameraHandler);
             }
-
             _dragAndDropService.Draw(spriteBatch);
+
+            spriteBatch.End();
         }
 
         public void Update(GameTime gameTime, CameraHandler cameraHandler)
