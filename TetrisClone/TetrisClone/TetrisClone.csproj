@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+	  <MonoGamePlatform>Windows</MonoGamePlatform>
+	  <ApplicationIcon />
+	  <StartupObject />
+  </PropertyGroup>
+	<ItemGroup>
+		<MonoGameContentReference Include="**\*.mgcb" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
+	  <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.0" />
+	  <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.0" />
+	  <PackageReference Include="QTree" Version="1.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Oscetch.MonoGame.GuiComponent\Oscetch.MonoGame.GuiComponent.DX.csproj" />
+	</ItemGroup>
+</Project>

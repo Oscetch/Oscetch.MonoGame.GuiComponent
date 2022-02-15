@@ -1,0 +1,120 @@
+﻿<UserControl x:Class="Editor.UserControls.ControlPropertiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Editor.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer CanContentScroll="True">
+        <StackPanel Orientation="Vertical">
+            <local:TextPropertyControl
+                Title="Name"
+                Description="The name of this control"
+                PropertyValue="{Binding GuiControlName, Mode=TwoWay}"
+                x:Name="NamePropertyControl"
+                    />
+            <local:ButtonPropertyControl 
+                Title="Scripts"
+                Description="Edit the scripts attached to this control"
+                ButtonText="Open script selector"
+                ButtonCommand="{Binding EditScriptsCommand}"
+                />
+            <local:BooleanPropertyControl 
+                Title="Is Enabled"
+                Description="If this control should update"
+                PropertyValue="{Binding GuiControlIsEnabled, Mode=TwoWay}"
+                x:Name="IsEnabledPropertyControl"
+                />
+            <local:BooleanPropertyControl 
+                Title="Is Visible"
+                Description="If this control should be rendered"
+                PropertyValue="{Binding GuiControlIsVisible, Mode=TwoWay}"
+                x:Name="IsVisiblePropertyControl"
+                />
+            <local:TextPropertyControl 
+                Title="Text"
+                Description="The text displayed in this control"
+                PropertyValue="{Binding GuiControlText, Mode=TwoWay}"
+                x:Name="TextPropertyControl"
+                    />
+            <local:FilePropertyControl
+                Title="Background Texture"
+                Description="The texture that should be rendered inside this control"
+                FileFilter="XNB Files(*.xnb)|*.xnb|PNG Files(*.png)|*.png"
+                PropertyValue="{Binding GuiControlBackground, Mode=TwoWay}"
+                />
+            <local:Vector2PropertyControl
+                Title="Position"
+                Description="The position of the current control"
+                PropertyXValue="{Binding GuiControlPositionX, Mode=TwoWay}"
+                PropertyYValue="{Binding GuiControlPositionY, Mode=TwoWay}"
+                x:Name="PositionPropertyControl"
+                />
+            <local:Vector2PropertyControl 
+                Title="Size"
+                Description="The size of the current control"
+                PropertyXValue="{Binding GuiControlSizeX, Mode=TwoWay}"
+                PropertyYValue="{Binding GuiControlSizeY, Mode=TwoWay}"
+                x:Name="SizePropertyControl"
+                />
+            <local:Vector2PropertyControl
+                Title="Text Position"
+                Description="The position of the text related to this control"
+                PropertyXValue="{Binding GuiControlTextPositionX, Mode=TwoWay}"
+                PropertyYValue="{Binding GuiControlTextPositionY, Mode=TwoWay}"
+                x:Name="TextPositionPropertyControl"
+                />
+            <local:FloatPropertyControl 
+                Title="Text Scale"
+                Description="The scale of the text related to this control"
+                PropertyValue="{Binding GuiControlTextScale, Mode=TwoWay}"
+                x:Name="TextScalePropertyControl"
+                />
+            <local:FloatPropertyControl 
+                Title="Text Rotation"
+                Description="The rotation of the text related to this control"
+                PropertyValue="{Binding GuiControlTextRotation, Mode=TwoWay}"
+                x:Name="TextRotationPropertyControl"
+                />
+            <local:ColorPropertyControl
+                Title="Text Color"
+                Description="The color of the text related to this control"
+                PropertyValue="{Binding GuiControlTextColor, Mode=TwoWay}"
+                x:Name="TextColorPropertyControl"
+                />
+            <local:BooleanPropertyControl 
+                Title="Should Center Text"
+                Description="Check if you want the text related to this control to be centered within it"
+                PropertyValue="{Binding GuiControlShouldCenterText, Mode=TwoWay}"
+                x:Name="CenterTextPropertyControl"
+                />
+            <local:FilePropertyControl
+                Title="Sprite Font"
+                Description="The path to the font you want to be used for the text related to this control"
+                PropertyValue="{Binding GuiControlSpriteFont, Mode=TwoWay}"
+                FileFilter="XNB Files(*.xnb)|*.xnb"
+                x:Name="SpriteFontPropertyControl"
+                />
+            <local:BooleanPropertyControl
+                Title="Has Border"
+                Description="Check if you want this control to have a border"
+                PropertyValue="{Binding GuiControlHasBorder, Mode=TwoWay}"
+                x:Name="HasBorderPropertyControl"
+                />
+            <local:ColorPropertyControl
+                Title="Border Color"
+                Description="The color of the border around this control"
+                PropertyValue="{Binding GuiControlBorderColor, Mode=TwoWay}"
+                x:Name="BorderColorPropertyControl"
+                />
+            <local:BooleanPropertyControl
+                Title="Is Modal"
+                Description="Makes it so that this control is the only visible and enabled modal control.
+                Other non-modal controls can not be interacted with when this control is enabled and visible"
+                PropertyValue="{Binding GuiControlIsModal, Mode=TwoWay}"
+                x:Name="IsModalPropertyControl"
+                />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

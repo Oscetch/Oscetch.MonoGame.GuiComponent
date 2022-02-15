@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.0.1" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.ScriptComponent.Compiler" Version="1.0.0" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MonoGameContentReference Include="**\*.mgcb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Oscetch.MonoGame.GuiComponent\Oscetch.MonoGame.GuiComponent.DX.csproj" />
+    <ProjectReference Include="..\..\TetrisClone\TetrisClone\TetrisClone.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ScriptTemplates\ScriptTemplate.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
