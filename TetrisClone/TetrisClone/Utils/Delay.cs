@@ -1,26 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TetrisClone.Utils
 {
-    public class Delay
+    public class Delay(double delayTime, bool invokeOnFirstCall = true)
     {
-        private bool _invokeOnFirstCall;
+        private readonly bool _invokeOnFirstCall = invokeOnFirstCall;
 
         public double TargetTime { get; set; } = 0.0;
-        public double DelayTime { get; set; } = 0.0;
+        public double DelayTime { get; set; } = delayTime;
 
         public long Loops { get; set; } = 0;
-
-        public Delay(double delayTime, bool invokeOnFirstCall = true)
-        {
-            DelayTime = delayTime;
-            _invokeOnFirstCall = invokeOnFirstCall;
-        }
 
         public void Wait(GameTime gt, Action action)
         {

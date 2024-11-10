@@ -36,6 +36,7 @@ namespace Editor.MonoGameControls
         public void Dispose()
         {
             Content?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public IGraphicsDeviceService GraphicsDeviceService { get; set; }
@@ -47,7 +48,7 @@ namespace Editor.MonoGameControls
         {
             Services = new MonoGameServiceProvider();
             Services.AddService(GraphicsDeviceService);
-            Content = new ContentManager(Services) { RootDirectory = "Content" };
+            Content = new ContentManager(Services) { RootDirectory = Settings.GetSettings().ContentPath };
         }
 
         public virtual void LoadContent() { }

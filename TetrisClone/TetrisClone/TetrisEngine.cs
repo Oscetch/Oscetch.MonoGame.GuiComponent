@@ -15,12 +15,12 @@ namespace TetrisClone
 {
     public class TetrisEngine
     {
-        private static readonly Random _random = new Random();
+        private static readonly Random _random = new();
 
         private readonly List<TetrisShapeBase> _activeShapes;
         private readonly KeyboardStateService _keyboard;
-        private readonly Delay _gameDelay = new Delay(1000);
-        private readonly QTree.DynamicQuadTree<TetrisBlock> _qTree = new QTree.DynamicQuadTree<TetrisBlock>();
+        private readonly Delay _gameDelay = new (1000);
+        private readonly QTree.DynamicQuadTree<TetrisBlock> _qTree = new ();
         private readonly List<Func<TetrisShapeBase>> _shapeCreationList;
 
         private readonly int _rowCount;
@@ -35,6 +35,8 @@ namespace TetrisClone
         private bool _shouldSpawn;
         private bool _shouldRestart;
 
+        public Action OnItemRemoved { get; set; } = null;
+
         public int Score { get; set; }
         public Point GameSize { get; }
         public Dictionary<Point, Rectangle> GameBoard { get; }
@@ -47,17 +49,17 @@ namespace TetrisClone
             GameBoard = gameSize.ToVector2()
                 .ToRectangle(Vector2.Zero)
                 .CreateGrid(_rowCount, _columnCount);
-            _activeShapes = new List<TetrisShapeBase>();
+            _activeShapes = [];
             _keyboard = KeyboardManager.GetGeneral();
 
-            _shapeCreationList = new List<Func<TetrisShapeBase>>
-            {
+            _shapeCreationList =
+            [
                 () => new LShape(GameSize),
                 () => new IShape(GameSize),
                 () => new BoxShape(GameSize),
                 () => new ZShape(GameSize),
                 () => new ArrowShape(GameSize)
-            };
+            ];
         }
 
         private void SpawnShape()
@@ -167,6 +169,7 @@ namespace TetrisClone
                 if(_activeShapes[i].Id == tetrisShapeBase.Id)
                 {
                     _activeShapes.RemoveAt(i);
+                    OnItemRemoved?.Invoke();
                     break;
                 }
             }

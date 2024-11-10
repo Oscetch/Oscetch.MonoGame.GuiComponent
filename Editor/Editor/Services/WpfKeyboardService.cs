@@ -12,8 +12,8 @@ namespace Editor.Services
             .Where(x => x != Key.None)
             .ToArray();
 
-        private readonly List<Key> _previousKeys = new List<Key>();
-        private readonly List<Key> _currentKeys = new List<Key>();
+        private readonly List<Key> _previousKeys = [];
+        private readonly List<Key> _currentKeys = [];
 
         public void Update()
         {

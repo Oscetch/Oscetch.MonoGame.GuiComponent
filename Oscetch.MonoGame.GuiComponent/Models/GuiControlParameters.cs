@@ -1,18 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Oscetch.ScriptComponent;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Oscetch.MonoGame.GuiComponent.Models
 {
-    public class GuiControlParameters
+    public class GuiControlParameters(Vector2 originalResolution)
     {
         public string Name { get; set; }
-        public Vector2 OriginalResolution { get; private set; }
+        public Vector2 OriginalResolution { get; private set; } = originalResolution;
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
         public Vector2 TextPosition { get; set; }
@@ -32,14 +28,9 @@ namespace Oscetch.MonoGame.GuiComponent.Models
         public bool HasBorder { get; set; }
         public Color BorderColor { get; set; } = Color.White;
 
-        public List<ScriptReference> ControlScripts { get; set; } = new List<ScriptReference>();
-        public List<ScriptReference> BuiltInScripts { get; set; } = new List<ScriptReference>();
-        public List<GuiControlParameters> ChildControls { get; set; } = new List<GuiControlParameters>();
-
-        public GuiControlParameters(Vector2 originalResolution)
-        {
-            OriginalResolution = originalResolution;
-        }
+        public List<ScriptReference> ControlScripts { get; set; } = [];
+        public List<ScriptReference> BuiltInScripts { get; set; } = [];
+        public List<GuiControlParameters> ChildControls { get; set; } = [];
 
         internal void UpdateResolution(Vector2 newResolution)
         {

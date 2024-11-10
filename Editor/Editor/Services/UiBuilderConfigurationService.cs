@@ -10,7 +10,7 @@ namespace Editor.Services
         private const string _uiBuilderConfigurationFileName = "Config/uiBuilderConfigration.json";
         private static readonly Dictionary<string, ControlBuilderConfiguration> _configurations = File.Exists(_uiBuilderConfigurationFileName)
             ? JsonConvert.DeserializeObject<Dictionary<string, ControlBuilderConfiguration>>(File.ReadAllText(_uiBuilderConfigurationFileName))
-            : new Dictionary<string, ControlBuilderConfiguration>();
+            : [];
 
         public static void AddOrUpdateConfiguration(string name, ControlBuilderConfiguration configuration)
         {

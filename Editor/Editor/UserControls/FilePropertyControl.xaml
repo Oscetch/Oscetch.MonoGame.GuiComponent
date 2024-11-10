@@ -21,7 +21,6 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock TextAlignment="Right" VerticalAlignment="Center" Margin="5">X:</TextBlock>
                 <TextBox Grid.Column="1" 
                          Margin="5" 
                          VerticalContentAlignment="Center"

@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -22,9 +20,13 @@ namespace Editor.ViewModels
 
         public ICommand CreateScriptCommand { get; }
         public ICommand EditScriptCommand { get; }
+        public ICommand ChangeBaseScriptCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
         public ICommand TestCommand { get; }
+        public ICommand EditTestExePathCommand { get; }
+        public ICommand EditTestJsonPathCommand { get; }
+        public ICommand EditDllOutputPath { get; }
 
         public MainWindowViewModel()
         {
@@ -32,9 +34,14 @@ namespace Editor.ViewModels
             LeftPanelViewModel = new LeftPanelViewModel(EditorViewModel);
 
             CreateScriptCommand = new CommandHandler(OpenScriptControl);
+            EditScriptCommand = new CommandHandler(OnEditScript);
+            ChangeBaseScriptCommand = new CommandHandler(OnChangeBaseScript);
             SaveCommand = new CommandHandler(OnSave);
             LoadCommand = new CommandHandler(OnLoad);
             TestCommand = new CommandHandler(OnTest);
+            EditTestExePathCommand = new CommandHandler(OnChangeExeTestPath);
+            EditTestJsonPathCommand = new CommandHandler(OnChangeJsonTestPath);
+            EditDllOutputPath = new CommandHandler(OnChangeDllPath);
         }
 
         private void OnLoad()
@@ -68,8 +75,20 @@ namespace Editor.ViewModels
 
         private void OnTest()
         {
+            var settings = Settings.GetSettings();
+            if (settings.TestJsonPath == null)
+            {
+                MessageBox.Show("You must select the json output path");
+                return;
+            }
+            if (settings.TestExePath == null)
+            {
+                MessageBox.Show("You must select the test exe output path");
+                return;
+            }
+
             var serialized = JsonConvert.SerializeObject(EditorViewModel.Parameters.ChildControls);
-            File.WriteAllText("testcanvas.json", serialized);
+            File.WriteAllText(settings.TestJsonPath, serialized);
 
             try
             {
@@ -77,7 +96,8 @@ namespace Editor.ViewModels
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = $"{typeof(TetrisClone.App).Namespace}.exe"
+                        FileName = settings.TestExePath,
+                        WorkingDirectory = Path.GetDirectoryName(settings.TestExePath),
                     }
                 };
 
@@ -107,8 +127,83 @@ namespace Editor.ViewModels
 
         private void OpenScriptControl()
         {
-            var scriptWindow = new ModalScriptWindow("ScriptTemplates/ScriptTemplate.txt");
+            var scriptWindow = new ModalScriptWindow(true, "ScriptTemplates/ScriptTemplate.txt");
             scriptWindow.ShowDialog();
+        }
+
+        private void OnEditScript()
+        {
+            var settings = Settings.GetSettings();
+            var openFileDialog = new OpenFileDialog
+            {
+                InitialDirectory = Path.GetFullPath(settings.ScriptsDir),
+                Filter = "C# file(*.cs)|*.cs",
+                Multiselect = false,
+            };
+            if (!(openFileDialog.ShowDialog() ?? false))
+            {
+                return;
+            }
+            var scriptWindow = new ModalScriptWindow(false, openFileDialog.FileName);
+            scriptWindow.ShowDialog();
+        }
+
+        private void OnChangeBaseScript()
+        {
+            var openFileDialog = new OpenFileDialog
+            { 
+                Filter = "Reference script(*.dll,*.exe)|*.dll;*.exe",
+                Multiselect = false,
+            };
+            if (!(openFileDialog.ShowDialog() ?? false))
+            {
+                return;
+            }
+            var scriptReferenceWindow = new ReferenceScriptTypeDialog(openFileDialog.FileName);
+            if (scriptReferenceWindow.ShowDialog() == true)
+            {
+                var settings = Settings.GetSettings().BaseScriptReference = scriptReferenceWindow.ScriptReferenceCheckedModels
+                    .FirstOrDefault(x => x.IsSelected)
+                    ?.ScriptReference;
+                Settings.Save();
+            }
+        }
+
+        private void OnChangeExeTestPath()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Game launcher (*.exe)|*.exe",
+                Multiselect = false
+            };
+            if (openFileDialog.ShowDialog() != true)
+            {
+                return;
+            }
+            Settings.GetSettings().TestExePath = openFileDialog.FileName;
+            Settings.Save();
+        }
+
+        private void OnChangeJsonTestPath()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Canvas file (*.json)|*.json",
+            };
+            if (saveFileDialog.ShowDialog() != true) { return; }
+            Settings.GetSettings().TestJsonPath = saveFileDialog.FileName;
+            Settings.Save();
+        }
+
+        private void OnChangeDllPath()
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Library (*.dll)|*.dll"
+            };
+            if (saveFileDialog.ShowDialog() != true) return;
+            Settings.GetSettings().OutputPath = saveFileDialog.FileName;
+            Settings.Save();
         }
     }
 }

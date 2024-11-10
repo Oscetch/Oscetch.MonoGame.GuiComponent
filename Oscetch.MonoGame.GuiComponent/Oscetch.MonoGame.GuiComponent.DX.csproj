@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Authors>OscarH</Authors>
     <Company>OscarH</Company>
     <Description>Library to act as a gui component for monogame</Description>
@@ -18,16 +18,16 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-	  <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt"/>
+	  <None Include="..\LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.2.1105" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Oscetch.MonoGame.Camera.DX" Version="1.0.0" />
     <PackageReference Include="Oscetch.MonoGame.Extensions.DX" Version="1.0.0" />
-    <PackageReference Include="Oscetch.MonoGame.Input.DX" Version="1.0.0" />
-    <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Input.DX" Version="1.0.2" />
+    <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.2" />
     <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.0" />
   </ItemGroup>
 

@@ -1,20 +1,18 @@
-﻿using Editor.Models;
+﻿using Editor.Extensions;
+using Editor.Models;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Completion;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.Win32;
 using Oscetch.ScriptComponent;
-using Oscetch.ScriptComponent.Compiler;
 using Oscetch.ScriptComponent.Compiler.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
-using TetrisClone;
-using TetrisClone.Utils;
 
 namespace Editor.Modals
 {
@@ -23,11 +21,11 @@ namespace Editor.Modals
     /// </summary>
     public partial class ModalScriptWindow : Window
     {
-        private Settings _settings;
+        private readonly Settings _settings;
         private Document _document;
         private CompletionWindow _completionWindow;
 
-        public ModalScriptWindow(string templatePath = null)
+        public ModalScriptWindow(bool isTemplatePath, string templatePath)
         {
             InitializeComponent();
             _settings = Settings.GetSettings();
@@ -36,11 +34,13 @@ namespace Editor.Modals
                 Directory.CreateDirectory(_settings.ScriptsDir);
             }
 
-            if(!string.IsNullOrWhiteSpace(templatePath) && File.Exists(templatePath))
+            if (File.Exists(templatePath))
             {
-                codeControl.Text = File.ReadAllText(templatePath);
+                var text = File.ReadAllText(templatePath);
+                codeControl.Text = isTemplatePath ? string.Format(text, _settings.BaseScriptReference.ScriptClassName) : text;
             }
-            _document = OscetchCompiler.CreateDocument("TestAssembly", new[] { GetType().Assembly });
+
+            _document = OscetchCompiler.CreateDocument("TestAssembly", [GetType().Assembly]);
 
             codeControl.TextArea.TextEntering += TextArea_TextEntering;
             codeControl.TextArea.TextEntered += TextArea_TextEntered;
@@ -67,14 +67,14 @@ namespace Editor.Modals
                 result = await completionService.GetCompletionsAsync(_document, codeControl.CaretOffset);
             }
             catch { }
-            if(result?.Items == null)
+            if(result.ItemsList == null)
             {
                 return;
             }
 
             _completionWindow = new CompletionWindow(codeControl.TextArea);
             var completionData = _completionWindow.CompletionList.CompletionData;
-            foreach(var item in result.Items)
+            foreach(var item in result.ItemsList)
             {
                 completionData.Add(new CompletionData(item));
             }
@@ -126,10 +126,10 @@ namespace Editor.Modals
             var newScriptPath = Path.Join(_settings.ScriptsDir, $"{stringDialog.Result}.cs");
             File.WriteAllText(newScriptPath, codeControl.Text);
 
-            var referencedAssemblies = typeof(TetrisEngine)
-                .LoadAllReferences()
-                .ToMetadata();
-
+            var referencePath = Settings.GetSettings().BaseScriptReference.DllPath;
+            var initialAssembly = Assembly.LoadFrom(referencePath);
+            var assemblyList = initialAssembly.GetReferencedAssembliesAtPath(referencePath);
+            var referencedAssemblies = assemblyList.ToMetadata();
             var result = OscetchCompiler.Compile(_settings.AssemblyName, syntaxTrees, referencedAssemblies, 
                 out var dllPath, out var diagnostics);
             if (!result)
@@ -142,11 +142,11 @@ namespace Editor.Modals
             File.Delete(dllPath);
         }
 
-        private IList<SyntaxTree> GetScriptSyntaxTrees(out IList<string> skippedScripts)
+        private List<SyntaxTree> GetScriptSyntaxTrees(out IList<string> skippedScripts)
         {
             var newClassNames = new List<string>();
             var syntaxTreeList = new List<SyntaxTree>();
-            skippedScripts = new List<string>();
+            skippedScripts = [];
 
             var scintillaSyntaxTree = CSharpSyntaxTree.ParseText(codeControl.Text);
             syntaxTreeList.Add(scintillaSyntaxTree);

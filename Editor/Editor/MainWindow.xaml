@@ -25,6 +25,12 @@
                 <MenuItem Header="_Create New" Command="{Binding CreateScriptCommand}" />
                 <MenuItem Header="_Edit" Command="{Binding EditScriptCommand}" />
             </MenuItem>
+            <MenuItem Header="_Settings">
+                <MenuItem Header="_Script Base" Command="{Binding ChangeBaseScriptCommand}" />
+                <MenuItem Header="_Test exe path" Command="{Binding EditTestExePathCommand}" />
+                <MenuItem Header="_Canvas json path" Command="{Binding EditTestJsonPathCommand}" />
+                <MenuItem Header="_Dll path" Command="{Binding EditDllOutputPath}" />
+            </MenuItem>
         </Menu>
         <Grid>
             <Grid.ColumnDefinitions>

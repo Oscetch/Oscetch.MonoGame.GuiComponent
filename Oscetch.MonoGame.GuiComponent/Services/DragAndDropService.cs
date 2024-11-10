@@ -9,20 +9,15 @@ using System.Linq;
 
 namespace Oscetch.MonoGame.GuiComponent.Services
 {
-    public class DragAndDropService<T> where T : IGameToGuiService
+    public class DragAndDropService<T>(GuiCanvas<T> canvas) where T : IGameToGuiService
     {
-        private readonly GuiCanvas<T> _canvas;
+        private readonly GuiCanvas<T> _canvas = canvas;
 
         private static List<DragAndDropItem> _currentItems;
         private Vector2 _lastPosition = Vector2.Zero;
         private bool _waitingOnDrag = false;
 
         public static bool IsDraging => _currentItems != null;
-
-        public DragAndDropService(GuiCanvas<T> canvas)
-        {
-            _canvas = canvas;
-        }
 
         public void Update()
         {
@@ -84,14 +79,14 @@ namespace Oscetch.MonoGame.GuiComponent.Services
             }
         }
 
-        private bool TryDrag(GuiControl<T> control, out List<DragAndDropItem> items)
+        private static bool TryDrag(GuiControl<T> control, out List<DragAndDropItem> items)
         {
             items = null;
 
             if (control.MouseOverGameObjectState == MouseOverControlState.Over)
             {
                 var dragItems = control.LoadedScripts.Select(x => x.OnDrag()).Where(x => x != null && x.Item != null).ToList();
-                if (dragItems.Any())
+                if (dragItems.Count != 0)
                 {
                     items = dragItems;
                     return true;
@@ -136,7 +131,7 @@ namespace Oscetch.MonoGame.GuiComponent.Services
             _currentItems = null;
         }
 
-        private bool TryDrop(GuiControl<T> control)
+        private static bool TryDrop(GuiControl<T> control)
         {
             if (control.MouseOverGameObjectState == MouseOverControlState.Over)
             {

@@ -23,7 +23,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
         private GuiControl<T> _activeModal;
 
-        public List<GuiControl<T>> Controls { get; } = new List<GuiControl<T>>();
+        public List<GuiControl<T>> Controls { get; } = [];
         public bool IsMouseOverControl { get; private set; }
 
         public GuiCanvas(string parametersFilePath, T gameToGuiService)
@@ -66,7 +66,7 @@ namespace Oscetch.MonoGame.GuiComponent
                     {
                         nonVisibleIndexesQueue.Enqueue(i);
                     }
-                    else if (nonVisibleIndexesQueue.Any())
+                    else if (nonVisibleIndexesQueue.Count != 0)
                     {
                         var insertIndex = nonVisibleIndexesQueue.Dequeue();
                         var previousControlAtIndex = Controls[insertIndex];
@@ -97,7 +97,7 @@ namespace Oscetch.MonoGame.GuiComponent
             }
         }
 
-        private bool FindControlByName(GuiControl<T> control, string nameToSearchFor, out GuiControl<T> customControl)
+        private static bool FindControlByName(GuiControl<T> control, string nameToSearchFor, out GuiControl<T> customControl)
         {
             if (control.Name == nameToSearchFor)
             {
@@ -149,7 +149,7 @@ namespace Oscetch.MonoGame.GuiComponent
                 {
                     nonVisibleIndexesQueue.Enqueue(i);
                 }
-                else if (nonVisibleIndexesQueue.Any())
+                else if (nonVisibleIndexesQueue.Count != 0)
                 {
                     var replaceIndex = nonVisibleIndexesQueue.Dequeue();
                     var replaceControl = Controls[replaceIndex];

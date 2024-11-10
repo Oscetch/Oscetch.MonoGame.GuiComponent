@@ -32,11 +32,11 @@ namespace Editor.MonoGameControls
 {
     public sealed class MonoGameContentControl : ContentControl, IDisposable
     {
-        private static readonly MonoGameGraphicsDeviceService _graphicsDeviceService = new MonoGameGraphicsDeviceService();
+        private static readonly MonoGameGraphicsDeviceService _graphicsDeviceService = new();
         private int _instanceCount;
         private IMonoGameViewModel _viewModel;
-        private readonly GameTime _gameTime = new GameTime();
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly GameTime _gameTime = new();
+        private readonly Stopwatch _stopwatch = new ();
         private D3DImage _direct3DImage;
         private RenderTarget2D _renderTarget;
         private SharpDX.Direct3D9.Texture _renderTargetD3D9;
@@ -77,11 +77,11 @@ namespace Editor.MonoGameControls
 
         public void Dispose()
         {
-            Dispose(true);
+            DisposePrivate();
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        private void DisposePrivate()
         {
             if (IsDisposed)
                 return;
@@ -99,7 +99,7 @@ namespace Editor.MonoGameControls
 
         ~MonoGameContentControl()
         {
-            Dispose(false);
+            DisposePrivate();
         }
 
         protected override void OnGotFocus(RoutedEventArgs e)
@@ -142,7 +142,6 @@ namespace Editor.MonoGameControls
 
             if (Application.Current.MainWindow == null)
                 return;
-                //throw new InvalidOperationException("The application must have a MainWindow");
 
             Application.Current.MainWindow.Closing += (sender, args) => _viewModel?.OnExiting(this, EventArgs.Empty);
             Application.Current.MainWindow.ContentRendered += (sender, args) =>
@@ -159,8 +158,6 @@ namespace Editor.MonoGameControls
             _direct3DImage = new D3DImage();
 
             AddChild(new Image { Source = _direct3DImage, Stretch = Stretch.None });
-
-            //_direct3DImage.IsFrontBufferAvailableChanged += OnDirect3DImageIsFrontBufferAvailableChanged;
 
             _renderTarget = CreateRenderTarget();
             CompositionTarget.Rendering += OnRender;
@@ -268,8 +265,7 @@ namespace Editor.MonoGameControls
                 {
                     _direct3DImage.Lock();
 
-                    if (_renderTarget == null)
-                        _renderTarget = CreateRenderTarget();
+                    _renderTarget ??= CreateRenderTarget();
 
                     if (_renderTarget != null)
                     {

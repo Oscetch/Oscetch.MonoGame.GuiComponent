@@ -67,7 +67,7 @@ namespace Editor.ViewModels
                 }
 
                 var extension = Path.GetExtension(value);
-                if (extension.ToLower() == "xnb")
+                if (extension.Equals("xnb", StringComparison.CurrentCultureIgnoreCase))
                 {
                     _editorViewModel.SelectedParameters.BackgroundTexture2DPath = Path.GetFileNameWithoutExtension(value);
                 }
@@ -349,7 +349,7 @@ namespace Editor.ViewModels
             }
         }
 
-        private System.Windows.Media.Color XnaColorToMediaColor(Color color)
+        private static System.Windows.Media.Color XnaColorToMediaColor(Color color)
         {
             return new System.Windows.Media.Color
             {
@@ -360,7 +360,7 @@ namespace Editor.ViewModels
             };
         }
 
-        private Color MediaColorToXnaColor(System.Windows.Media.Color color)
+        private static Color MediaColorToXnaColor(System.Windows.Media.Color color)
         {
             return new Color(color.R, color.G, color.B, color.A);
         }

@@ -20,7 +20,7 @@ namespace Oscetch.MonoGame.GuiComponent
     public class GuiControl<T> where T : IGameToGuiService
     {
         private static ulong _idCounter = 0;
-        private static Vector2 _borderLineOrigin = new Vector2(.5f);
+        private static Vector2 _borderLineOrigin = new(.5f);
         private readonly List<GuiControl<T>> _children;
         private readonly List<Line> _borderLines;
 
@@ -127,7 +127,7 @@ namespace Oscetch.MonoGame.GuiComponent
         }
         public GuiControl<T> Parent { get; private set; }
         public Texture2D BorderTexture { get; set; }
-        public virtual Rectangle Bounds => new Rectangle(Position.ToPoint(), Size.ToPoint());
+        public virtual Rectangle Bounds => new(Position.ToPoint(), Size.ToPoint());
         public virtual Color Color { get; set; } = Color.White;
         public MouseOverControlState MouseOverGameObjectState { get; protected set; } = MouseOverControlState.Outside;
 
@@ -136,11 +136,11 @@ namespace Oscetch.MonoGame.GuiComponent
         {
             Id = _idCounter;
             _idCounter++;
-            _borderLines = new List<Line>();
+            _borderLines = [];
             Parameters = customControlParameters;
 
-            _children = new List<GuiControl<T>>();
-            LoadedScripts = new List<IGuiScript<T>>();
+            _children = [];
+            LoadedScripts = [];
 
             foreach (var child in Parameters.ChildControls)
             {
@@ -347,10 +347,8 @@ namespace Oscetch.MonoGame.GuiComponent
                 return;
             }
 
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            {
-                Background = Texture2D.FromStream(graphicsDevice, fileStream);
-            }
+            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            Background = Texture2D.FromStream(graphicsDevice, fileStream);
         }
 
         public void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice, Vector2 resolution)

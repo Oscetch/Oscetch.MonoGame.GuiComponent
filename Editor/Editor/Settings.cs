@@ -1,13 +1,6 @@
-﻿using Editor.Models;
-using Microsoft.CodeAnalysis.Classification;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Oscetch.ScriptComponent;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace Editor
 {
@@ -46,8 +39,11 @@ namespace Editor
         private Settings() { }
 
         public string AssemblyName { get; set; } = "Default";
-        public string BuildDirectory { get; set; } = Environment.CurrentDirectory;
-        public string OutputPath { get; set; } = "Default.dll";
+        public string OutputPath { get; set; } = "Osetch.Canvas.dll";
         public string ScriptsDir { get; set; } = "scripts";
+        public string TestExePath { get; set; } = null;
+        public string TestJsonPath { get; set; } = null;
+        public string ContentPath { get; set; } = null;
+        public ScriptReference BaseScriptReference { get; set; } = null;
     }
 }

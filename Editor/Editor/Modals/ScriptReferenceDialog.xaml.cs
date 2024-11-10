@@ -1,22 +1,14 @@
-﻿using Editor.Models;
+﻿using Editor.Extensions;
+using Editor.Models;
+using Oscetch.MonoGame.GuiComponent.Interfaces;
 using Oscetch.ScriptComponent;
 using Oscetch.ScriptComponent.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Editor.Modals
 {
@@ -36,7 +28,7 @@ namespace Editor.Modals
 
             Title = "Script References";
 
-            ScriptReferenceCheckedModels = new ObservableCollection<ScriptReferenceCheckedModel>();
+            ScriptReferenceCheckedModels = [];
             foreach(var currentReference in currentReferences)
             {
                 ScriptReferenceCheckedModels.Add(new ScriptReferenceCheckedModel(currentReference, true));
@@ -44,12 +36,15 @@ namespace Editor.Modals
 
             if (File.Exists(_settings.OutputPath))
             {
-                var assembly = Assembly.Load(File.ReadAllBytes(_settings.OutputPath));
-                var scriptInterface = typeof(IScript);
-                var types = assembly.GetTypes()
-                    .Where(x => scriptInterface.IsAssignableFrom(x));
+                var baseScriptAssembly = Assembly.LoadFrom(_settings.BaseScriptReference.DllPath);
+                baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.BaseScriptReference.DllPath);
+                var assembly = Assembly.LoadFrom(_settings.OutputPath);
+                assembly.GetReferencedAssembliesAtPath(_settings.OutputPath);
 
-                foreach (var type in types) 
+                var scriptInterface = typeof(IGuiScript<>);
+                var assignableTypes = assembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == scriptInterface)).ToList();
+
+                foreach (var type in assignableTypes) 
                 {
                     var scriptReference = new ScriptReference(_settings.OutputPath, type.FullName);
                     if(currentReferences.Any(x => x == scriptReference))

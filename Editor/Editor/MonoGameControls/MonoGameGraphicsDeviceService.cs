@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Interop;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
 
 namespace Editor.MonoGameControls
@@ -19,6 +18,7 @@ namespace Editor.MonoGameControls
             GraphicsDevice.Dispose();
             Direct3DDevice?.Dispose();
             Direct3DContext?.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public Direct3DEx Direct3DContext { get; private set; }

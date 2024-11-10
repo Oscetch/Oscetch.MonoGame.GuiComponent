@@ -8,7 +8,7 @@ using Oscetch.MonoGame.GuiComponent.Models;
 
 namespace TetrisClone.Utils
 {
-    public abstract class ScriptBase : IGuiScript<GameToGuiService>
+    public class ScriptBase : IGuiScript<GameToGuiService>
     {
         public virtual void Initialize(GuiControl<GameToGuiService> control,
             ContentManager contentManager,

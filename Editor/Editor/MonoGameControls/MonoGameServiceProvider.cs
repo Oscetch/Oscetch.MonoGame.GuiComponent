@@ -9,7 +9,7 @@ namespace Editor.MonoGameControls
 
         public MonoGameServiceProvider()
         {
-            _services = new Dictionary<Type, object>();
+            _services = [];
         }
 
         public void AddService(Type type, object provider)

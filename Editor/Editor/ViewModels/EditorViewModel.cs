@@ -17,13 +17,13 @@ using Oscetch.MonoGame.Textures.Enums;
 using System.Windows.Input;
 using System.Windows;
 using Point = Microsoft.Xna.Framework.Point;
-using TetrisClone;
+using Oscetch.MonoGame.GuiComponent.Interfaces;
 
 namespace Editor.ViewModels
 {
     public class EditorViewModel : MonoGameViewModel
     {
-        private readonly List<Rectangle> _alignmentIndicators = new();
+        private readonly List<Rectangle> _alignmentIndicators = [];
 
         private DateTime _lastSelectedControlClick = DateTime.MinValue;
 
@@ -42,7 +42,7 @@ namespace Editor.ViewModels
         private Rectangle _drawableBoundsRect;
 
         private SpriteBatch _spriteBatch;
-        private WpfKeyboardService _keyboard = new();
+        private readonly WpfKeyboardService _keyboard = new();
 
         private Texture2D _invisibleControlBorderTexture;
         private Texture2D _alignmentTexture;
@@ -52,7 +52,7 @@ namespace Editor.ViewModels
 
         private SpriteFont _font;
 
-        private GuiControl<GameToGuiService> _customControl;
+        private GuiControl<IGameToGuiService> _customControl;
 
         private CameraHandler _cameraHandler;
         private DragMode _currentDragMode = DragMode.None;
@@ -61,8 +61,8 @@ namespace Editor.ViewModels
         private bool _showIndicator;
         private bool _isDraggingCamera;
 
-        private GuiControl<GameToGuiService> _selectedControl;
-        private GuiControl<GameToGuiService> SelectedControl 
+        private GuiControl<IGameToGuiService> _selectedControl;
+        private GuiControl<IGameToGuiService> SelectedControl 
         { 
             get => _selectedControl; 
             set
@@ -84,13 +84,11 @@ namespace Editor.ViewModels
 
         public GuiControlParameters SelectedParameters => SelectedControl?.Parameters;
 
-        public IReadOnlyList<GuiControl<GameToGuiService>> Children => _customControl.Children;
+        public IReadOnlyList<GuiControl<IGameToGuiService>> Children => _customControl.Children;
 
         public ControlBuilderConfiguration Configuration { get; private set; } = new ControlBuilderConfiguration();
 
-        public bool IsRootControlSelected => SelectedControl == null
-            ? false
-            : SelectedControl.Id == _customControl.Id;
+        public bool IsRootControlSelected => SelectedControl != null && SelectedControl.Id == _customControl.Id;
 
         private void SetDrawableArea()
         {
@@ -109,7 +107,7 @@ namespace Editor.ViewModels
             _showIndicator = GetSizeAnchor(_mousePosition) != SizeAnchor.None;
         }
 
-        private void UpdateControlPosition(GuiControl<GameToGuiService> control, Vector2 positionDiff)
+        private static void UpdateControlPosition(GuiControl<IGameToGuiService> control, Vector2 positionDiff)
         {
             control.Position -= positionDiff;
             control.TextPosition -= positionDiff;
@@ -123,9 +121,9 @@ namespace Editor.ViewModels
         {
             if (controlId == _customControl.Id)
             {
-                var canvasControl = new GuiControl<GameToGuiService>(new GuiControlParameters(Resolution)
+                var canvasControl = new GuiControl<IGameToGuiService>(new GuiControlParameters(Resolution)
                 {
-                    ChildControls = new List<GuiControlParameters> { Parameters }
+                    ChildControls = [Parameters]
                 }, null);
 
                 searchResult = new UiControlSearchResult(canvasControl, 0);
@@ -149,7 +147,7 @@ namespace Editor.ViewModels
             return false;
         }
 
-        private bool TryGetControl(UiControlSearchResult currentResult, ulong controlId, out UiControlSearchResult searchResult)
+        private static bool TryGetControl(UiControlSearchResult currentResult, ulong controlId, out UiControlSearchResult searchResult)
         {
             if (currentResult.Control.Id == controlId)
             {
@@ -256,10 +254,10 @@ namespace Editor.ViewModels
             return alignmentRects;
         }
 
-        private bool TryGetControlHeriarchy(GuiControl<GameToGuiService> control, ulong searchingId, 
-            out List<GuiControl<GameToGuiService>> lowerHeriarchy)
+        private static bool TryGetControlHeriarchy(GuiControl<IGameToGuiService> control, ulong searchingId, 
+            out List<GuiControl<IGameToGuiService>> lowerHeriarchy)
         {
-            lowerHeriarchy = new List<GuiControl<GameToGuiService>>();
+            lowerHeriarchy = [];
             if (control.Id == searchingId)
             {
                 return true;
@@ -280,7 +278,7 @@ namespace Editor.ViewModels
             return false;
         }
 
-        private Point ConvertToXnaPoint(System.Windows.Point point)
+        private static Point ConvertToXnaPoint(System.Windows.Point point)
         {
             return new Point((int)point.X, (int)point.Y);
         }
@@ -309,7 +307,7 @@ namespace Editor.ViewModels
             }
         }
 
-        private void IncreaseControlRenderOrder(GuiControl<GameToGuiService> customControl)
+        private void IncreaseControlRenderOrder(GuiControl<IGameToGuiService> customControl)
         {
             if (!TryGetClosestParent(customControl, out var parent))
             {
@@ -332,7 +330,7 @@ namespace Editor.ViewModels
             parent.InsertChild(customControl, newIndex);
         }
 
-        private void DecreaseControlRenderOrder(GuiControl<GameToGuiService> customControl)
+        private void DecreaseControlRenderOrder(GuiControl<IGameToGuiService> customControl)
         {
             if (!TryGetClosestParent(customControl, out var parent))
             {
@@ -356,7 +354,7 @@ namespace Editor.ViewModels
             parent.InsertChild(customControl, newIndex);
         }
 
-        private bool TryGetClosestParent(GuiControl<GameToGuiService> customControl, out GuiControl<GameToGuiService> parent)
+        private bool TryGetClosestParent(GuiControl<IGameToGuiService> customControl, out GuiControl<IGameToGuiService> parent)
         {
             if (customControl == null)
             {
@@ -367,7 +365,7 @@ namespace Editor.ViewModels
             return parent != null;
         }
 
-        private void ChangeControlSize(GuiControl<GameToGuiService> control, SizeAnchor anchor, Vector2 change)
+        private static void ChangeControlSize(GuiControl<IGameToGuiService> control, SizeAnchor anchor, Vector2 change)
         {
             switch (anchor)
             {
@@ -512,7 +510,7 @@ namespace Editor.ViewModels
         {
             SelectedControl = null;
             _showIndicator = false;
-            _customControl = new GuiControl<GameToGuiService>(parameters, null);
+            _customControl = new GuiControl<IGameToGuiService>(parameters, null);
             _customControl.LoadContent(Content, GraphicsDevice, _drawableBoundsRect.Size.ToVector2());
         }
 
@@ -530,17 +528,17 @@ namespace Editor.ViewModels
             SelectedControl = SelectedControl.Parent;
         }
 
-        public List<GuiControl<GameToGuiService>> GetControlHeriarchy(ulong id)
+        public List<GuiControl<IGameToGuiService>> GetControlHeriarchy(ulong id)
         {
             if (TryGetControlHeriarchy(_customControl, id, out var heriachy))
             {
                 return heriachy;
             }
 
-            return new List<GuiControl<GameToGuiService>>();
+            return [];
         }
 
-        public IEnumerable<GuiControl<GameToGuiService>> GetAllControls(ulong? ignoreChildrenOf = null)
+        public IEnumerable<GuiControl<IGameToGuiService>> GetAllControls(ulong? ignoreChildrenOf = null)
         {
             if (!ignoreChildrenOf.HasValue)
             {
@@ -560,7 +558,7 @@ namespace Editor.ViewModels
             }
         }
 
-        public IEnumerable<GuiControl<GameToGuiService>> GetAllChildrenOf(GuiControl<GameToGuiService> customControl)
+        public static IEnumerable<GuiControl<IGameToGuiService>> GetAllChildrenOf(GuiControl<IGameToGuiService> customControl)
         {
             foreach (var child in customControl.Children)
             {
@@ -572,7 +570,7 @@ namespace Editor.ViewModels
             }
         }
 
-        public IEnumerable<GuiControl<GameToGuiService>> GetAllChildrenOfWithException(GuiControl<GameToGuiService> customControl, 
+        public static IEnumerable<GuiControl<IGameToGuiService>> GetAllChildrenOfWithException(GuiControl<IGameToGuiService> customControl, 
             ulong ignoreChildrenOf)
         {
             foreach (var child in customControl.Children)
@@ -590,7 +588,7 @@ namespace Editor.ViewModels
             }
         }
 
-        public void UpdateControlSize(GuiControl<TempGameToGuiService> control, Vector2 sizeDiff)
+        public static void UpdateControlSize(GuiControl<IGameToGuiService> control, Vector2 sizeDiff)
         {
             control.Size -= sizeDiff;
             foreach (var child in control.Children)
@@ -791,7 +789,7 @@ namespace Editor.ViewModels
             _font = Content.Load<SpriteFont>("Fonts/DefaultFont");
 
             IsInitialized = true;
-            _customControl = new GuiControl<GameToGuiService>(new GuiControlParameters(_drawableBoundsRect.Size.ToVector2()) 
+            _customControl = new GuiControl<IGameToGuiService>(new GuiControlParameters(_drawableBoundsRect.Size.ToVector2()) 
             {
                 IsVisible = true,
                 IsEnabled = true
@@ -869,10 +867,8 @@ namespace Editor.ViewModels
                     CameraPosition = _cameraHandler.CameraPosition,
                     Scale = _cameraHandler.Scale
                 };
-                //_drawableBoundsRect = Rectangle.Empty;
             }
 
-            //SetDrawableArea();
             if (GetAllControls().Any(x => x.Background != null && x.Background.IsDisposed))
             {
                 ResetWithParameters(Parameters);
@@ -936,7 +932,6 @@ namespace Editor.ViewModels
             _alignmentIndicators.AddRange(CheckForAlignment(bounds, _drawableBoundsRect, Configuration.AlignmentIndicationWidth));
         }
 
-        //public event EventHandler SelectedControlDoubleClicked;
         public event EventHandler ControlChildrenUpdated;
         public event EventHandler SelectedControlChanged;
         public event EventHandler SelectedControlSizeUpdated;

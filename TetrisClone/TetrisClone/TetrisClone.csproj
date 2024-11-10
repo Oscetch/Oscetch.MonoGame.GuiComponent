@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-	  <MonoGamePlatform>Windows</MonoGamePlatform>
+    <TargetFramework>net8.0-windows</TargetFramework>
 	  <ApplicationIcon />
 	  <StartupObject />
   </PropertyGroup>
@@ -11,12 +10,17 @@
 		<MonoGameContentReference Include="**\*.mgcb" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
-	  <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.0" />
-	  <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.0" />
-	  <PackageReference Include="QTree" Version="1.0.3" />
+	  <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.2.1105" />
+	  <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.2.1105" />
+	  <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.2" />
+	  <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.4" />
+	  <PackageReference Include="QTree" Version="1.0.5" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Oscetch.MonoGame.GuiComponent\Oscetch.MonoGame.GuiComponent.DX.csproj" />
 	</ItemGroup>
+	<Target Name="RestoreDotnetTools" BeforeTargets="Restore">
+		<Message Text="Restoring dotnet tools" Importance="High" />
+		<Exec Command="dotnet tool restore" />
+	</Target>
 </Project>

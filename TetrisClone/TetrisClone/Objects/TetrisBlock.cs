@@ -3,11 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Oscetch.MonoGame.Textures;
 using QTree;
 using QTree.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TetrisClone.Objects
 {

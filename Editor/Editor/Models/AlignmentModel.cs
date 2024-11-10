@@ -23,7 +23,7 @@ namespace Editor.Models
                 .OrderBy(x => Vector2.Distance(currentPosition, x))
                 .ToList();
 
-            if (potentialPositions.Any())
+            if (potentialPositions.Count != 0)
             {
                 NewPosition = potentialPositions.First();
                 DistanceToAlignment = Vector2.Distance(currentPosition, NewPosition);
@@ -38,7 +38,7 @@ namespace Editor.Models
             }
         }
 
-        private AlignmentType GetAlignmentType(Point newPosition, Point currentPosition)
+        private static AlignmentType GetAlignmentType(Point newPosition, Point currentPosition)
         {
             if (newPosition == currentPosition)
             {

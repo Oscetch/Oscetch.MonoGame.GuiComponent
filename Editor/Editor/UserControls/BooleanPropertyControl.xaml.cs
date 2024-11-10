@@ -52,9 +52,7 @@ namespace Editor.UserControls
                 return;
             }
 
-            view.ValueCheckBox.IsChecked = e.NewValue is bool isChecked 
-                ? isChecked 
-                : false;
+            view.ValueCheckBox.IsChecked = e.NewValue is bool isChecked && isChecked;
         }
 
         private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

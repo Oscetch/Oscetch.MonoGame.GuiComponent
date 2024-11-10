@@ -1,6 +1,4 @@
-﻿using Editor.ViewModels;
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Editor.UserControls

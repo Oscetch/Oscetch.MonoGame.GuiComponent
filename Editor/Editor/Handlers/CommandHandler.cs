@@ -5,8 +5,8 @@ namespace Editor.Handlers
 {
     public class CommandHandler : ICommand
     {
-        private Action _action;
-        private Func<bool> _canExecute;
+        private readonly Action _action;
+        private readonly Func<bool> _canExecute;
 
         public CommandHandler(Action action, Func<bool> canExecute)
         {

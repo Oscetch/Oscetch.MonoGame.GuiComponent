@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using TetrisClone;
 using TetrisClone.Utils;
 
-public class ScriptTemplate : ScriptBase
-{
+public class ScriptTemplate : {0}
+{{
     private GuiControl<GameToGuiService> _control;
     private GameToGuiService _gameToGuiService;
 
@@ -20,12 +20,12 @@ public class ScriptTemplate : ScriptBase
         ContentManager contentManager,
         GraphicsDevice graphicsDevice,
         GameToGuiService gameToGuiService)
-    {
+    {{
         _control = control;
         _gameToGuiService = gameToGuiService;
-    }
+    }}
 
     public override void Update(GameTime gameTime, CameraHandler cameraHandler)
-    {
-    }
-}
+    {{
+    }}
+}}
