@@ -90,6 +90,9 @@ namespace Editor.ViewModels
             var serialized = JsonConvert.SerializeObject(EditorViewModel.Parameters.ChildControls);
             File.WriteAllText(settings.TestJsonPath, serialized);
 
+            var binTargetPath = Path.Join(Path.GetDirectoryName(settings.TestExePath), Path.GetFileName(settings.OutputPath));
+            File.Copy(settings.OutputPath, binTargetPath, true);
+
             try
             {
                 var process = new Process

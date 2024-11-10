@@ -36,6 +36,7 @@ namespace Editor.Modals
 
             if (File.Exists(_settings.OutputPath))
             {
+                var outputFileName = Path.GetFileName(_settings.OutputPath);
                 var baseScriptAssembly = Assembly.LoadFrom(_settings.BaseScriptReference.DllPath);
                 baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.BaseScriptReference.DllPath);
                 var assembly = Assembly.LoadFrom(_settings.OutputPath);
@@ -46,7 +47,7 @@ namespace Editor.Modals
 
                 foreach (var type in assignableTypes) 
                 {
-                    var scriptReference = new ScriptReference(_settings.OutputPath, type.FullName);
+                    var scriptReference = new ScriptReference(outputFileName, type.FullName);
                     if(currentReferences.Any(x => x == scriptReference))
                     {
                         continue;
