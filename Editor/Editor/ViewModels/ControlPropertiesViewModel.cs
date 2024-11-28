@@ -1,8 +1,11 @@
 ﻿using Editor.Handlers;
 using Editor.Modals;
 using Microsoft.Xna.Framework;
+using Oscetch.ScriptComponent;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Editor.ViewModels
@@ -66,14 +69,19 @@ namespace Editor.ViewModels
                     return;
                 }
 
-                var extension = Path.GetExtension(value);
-                if (extension.Equals("xnb", StringComparison.CurrentCultureIgnoreCase))
+                if (value == null)
                 {
-                    _editorViewModel.SelectedParameters.BackgroundTexture2DPath = Path.GetFileNameWithoutExtension(value);
-                }
-                else
+                    _editorViewModel.SelectedParameters.BackgroundTexture2DPath = null;
+                    _editorViewModel.LoadSelected();
+                } else
                 {
-                    _editorViewModel.SelectedParameters.BackgroundTexture2DPath = value;
+                    var extension = Path.GetExtension(value);
+                    if (extension.Equals(".xnb", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        _editorViewModel.SelectedParameters.BackgroundTexture2DPath = Path.GetFileNameWithoutExtension(value);
+                        _editorViewModel.LoadSelected();
+                    }
+
                 }
                 OnPropertyChanged();
             }
@@ -331,20 +339,31 @@ namespace Editor.ViewModels
             {
                 return;
             }
+            var settings = Settings.GetSettings();
+            var allScripts = new List<ScriptReference>();
+            allScripts.AddRange(_editorViewModel.SelectedParameters.ControlScripts);
+            allScripts.AddRange(_editorViewModel.SelectedParameters.BuiltInScripts);
 
-            var dialog = new ScriptReferenceDialog(_editorViewModel.SelectedParameters.ControlScripts);
+            var dialog = new ScriptReferenceDialog(allScripts);
             var result = dialog.ShowDialog() ?? false;
             if (result)
             {
                 _editorViewModel.SelectedParameters.ControlScripts.Clear();
-                foreach(var reference in dialog.ScriptReferenceCheckedModels)
+                _editorViewModel.SelectedParameters.BuiltInScripts.Clear();
+                foreach (var reference in dialog.ScriptReferenceCheckedModels)
                 {
                     if (!reference.IsSelected)
                     {
                         continue;
                     }
-
-                    _editorViewModel.SelectedParameters.ControlScripts.Add(reference.ScriptReference);
+                    if (settings.BaseScriptReference.DllPath.EndsWith(reference.ScriptReference.DllPath))
+                    {
+                        _editorViewModel.SelectedParameters.BuiltInScripts.Add(reference.ScriptReference);
+                    }
+                    else
+                    {
+                        _editorViewModel.SelectedParameters.ControlScripts.Add(reference.ScriptReference);
+                    }
                 }
             }
         }
@@ -370,6 +389,7 @@ namespace Editor.ViewModels
             OnPropertyChanged(nameof(GuiControlName));
             OnPropertyChanged(nameof(GuiControlIsEnabled));
             OnPropertyChanged(nameof(GuiControlIsVisible));
+            OnPropertyChanged(nameof(GuiControlBackground));
             OnPropertyChanged(nameof(GuiControlText));
             OnPropertyChanged(nameof(GuiControlPositionX));
             OnPropertyChanged(nameof(GuiControlSizeX));

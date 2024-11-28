@@ -44,6 +44,7 @@ namespace Editor
         public string TestExePath { get; set; } = null;
         public string TestJsonPath { get; set; } = null;
         public string ContentPath { get; set; } = null;
+        public string FontPath { get; set; } = null;
         public ScriptReference BaseScriptReference { get; set; } = null;
     }
 }

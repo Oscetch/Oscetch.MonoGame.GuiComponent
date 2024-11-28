@@ -16,7 +16,7 @@
             </Grid.RowDefinitions>
             <TextBlock Margin="5" FontSize="20" TextWrapping="Wrap" x:Name="TitleTextBlock" />
             <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
-            <colorpicker:PortableColorPicker Margin="5" Grid.Row="2" BorderBrush="Black" BorderThickness="1" x:Name="ColorPicker" />
+            <colorpicker:PortableColorPicker Margin="5" Grid.Row="2" BorderBrush="White" Height="30" BorderThickness="1" x:Name="ColorPicker" />
         </Grid>
     </Border>
 </UserControl>

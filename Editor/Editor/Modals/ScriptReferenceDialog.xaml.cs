@@ -3,6 +3,7 @@ using Editor.Models;
 using Oscetch.MonoGame.GuiComponent.Interfaces;
 using Oscetch.ScriptComponent;
 using Oscetch.ScriptComponent.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -37,26 +38,37 @@ namespace Editor.Modals
             if (File.Exists(_settings.OutputPath))
             {
                 var outputFileName = Path.GetFileName(_settings.OutputPath);
+                var baseScriptReferenceName = Path.GetFileName(_settings.BaseScriptReference.DllPath);
                 var baseScriptAssembly = Assembly.LoadFrom(_settings.BaseScriptReference.DllPath);
                 baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.BaseScriptReference.DllPath);
                 var assembly = Assembly.LoadFrom(_settings.OutputPath);
                 assembly.GetReferencedAssembliesAtPath(_settings.OutputPath);
 
-                var scriptInterface = typeof(IGuiScript<>);
-                var assignableTypes = assembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == scriptInterface)).ToList();
+                var scriptInterface = typeof(IScript);
+                var assignableTypes = assembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
+                var builtInTypes = baseScriptAssembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
 
                 foreach (var type in assignableTypes) 
                 {
-                    var scriptReference = new ScriptReference(outputFileName, type.FullName);
-                    if(currentReferences.Any(x => x == scriptReference))
-                    {
-                        continue;
-                    }
-                    ScriptReferenceCheckedModels.Add(new ScriptReferenceCheckedModel(scriptReference, false));
+                    AddScriptReferenceCheckedModel(currentReferences, type, outputFileName);
+                }
+                foreach (var type in builtInTypes)
+                {
+                    AddScriptReferenceCheckedModel(currentReferences, type, baseScriptReferenceName);
                 }
             }
 
             DataContext = this;
+        }
+
+        private void AddScriptReferenceCheckedModel(List<ScriptReference> currentReferences, Type type, string dllPath) 
+        {
+            var scriptReference = new ScriptReference(dllPath, type.FullName);
+            if (currentReferences.Any(x => x == scriptReference))
+            {
+                return;
+            }
+            ScriptReferenceCheckedModels.Add(new ScriptReferenceCheckedModel(scriptReference, false));
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)

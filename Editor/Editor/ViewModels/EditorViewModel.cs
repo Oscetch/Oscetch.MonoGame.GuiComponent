@@ -18,6 +18,8 @@ using System.Windows.Input;
 using System.Windows;
 using Point = Microsoft.Xna.Framework.Point;
 using Oscetch.MonoGame.GuiComponent.Interfaces;
+using Microsoft.Xna.Framework.Content;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace Editor.ViewModels
 {
@@ -89,6 +91,19 @@ namespace Editor.ViewModels
         public ControlBuilderConfiguration Configuration { get; private set; } = new ControlBuilderConfiguration();
 
         public bool IsRootControlSelected => SelectedControl != null && SelectedControl.Id == _customControl.Id;
+
+        public void LoadSelected()
+        {
+            if (_selectedControl == null) return;
+            if (!string.IsNullOrEmpty(SelectedParameters.BackgroundTexture2DPath))
+            {
+                _selectedControl.Background = Content.Load<Texture2D>(SelectedParameters.BackgroundTexture2DPath);
+            }
+            else
+            {
+                _selectedControl.Background = null;
+            }
+        }
 
         private void SetDrawableArea()
         {
@@ -785,14 +800,15 @@ namespace Editor.ViewModels
             SetDrawableArea();
 
             SetConfiguration(UiBuilderConfigurationHelper.GetConfiguration("default"));
-
-            _font = Content.Load<SpriteFont>("Fonts/DefaultFont");
+            var fontPath = Settings.GetSettings().FontPath;
+            _font = Content.Load<SpriteFont>(fontPath);
 
             IsInitialized = true;
             _customControl = new GuiControl<IGameToGuiService>(new GuiControlParameters(_drawableBoundsRect.Size.ToVector2()) 
             {
                 IsVisible = true,
-                IsEnabled = true
+                IsEnabled = true,
+                SpriteFont = fontPath
             }, null);
         }
 

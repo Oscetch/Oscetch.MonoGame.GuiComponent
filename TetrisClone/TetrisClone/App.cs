@@ -11,8 +11,8 @@ namespace TetrisClone
 		private readonly GraphicsDeviceManager _graphics;
 		private readonly GameToGuiService _gameToGuiService;
         private readonly GuiCanvas<GameToGuiService> _guiCanvas;
-		private readonly CameraHandler _cameraHandler;
-		private readonly CameraHandler _guiCamera;
+        private readonly CameraHandler _guiCamera;
+        private readonly CameraHandler _cameraHandler;
 		private readonly TetrisEngine _tetrisEngine;
 		private SpriteBatch _spriteBatch;
 

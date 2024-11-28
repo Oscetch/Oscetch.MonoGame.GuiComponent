@@ -26,6 +26,18 @@ namespace Editor
                 settings.ContentPath = directoryDialog.FolderName;
                 Settings.Save();
             }
+            if (settings.FontPath == null)
+            {
+                var stringDialog = new StringDialog("Font name dialog", "Enter the font dialog as you would in you game", "Default/Font");
+                if (stringDialog.ShowDialog() != true)
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
+                settings.FontPath = stringDialog.Result;
+                Settings.Save();
+            }
             if (settings.BaseScriptReference == null)
             {
                 var openFileDialog = new OpenFileDialog

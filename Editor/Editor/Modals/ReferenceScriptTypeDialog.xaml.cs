@@ -1,16 +1,13 @@
 ﻿using Editor.Models;
-using Oscetch.ScriptComponent.Interfaces;
 using Oscetch.ScriptComponent;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using Oscetch.MonoGame.GuiComponent.Interfaces;
 using System.Diagnostics;
 using System;
-using System.Windows.Documents;
-using System.Collections.Generic;
+using Oscetch.ScriptComponent.Interfaces;
 
 namespace Editor.Modals
 {
@@ -26,14 +23,14 @@ namespace Editor.Modals
             InitializeComponent();
 
             ScriptReferenceCheckedModels = [];
-            var scriptInterface = typeof(IGuiScript<>);
+            var scriptInterface = typeof(IScript);
             if (File.Exists(referencePath))
             {
                 var assembly = Assembly.LoadFrom(referencePath);
                 try
                 {
                     var types = assembly.GetTypes();
-                    var assignableTypes = assembly.GetTypes().Where(x => x.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == scriptInterface)).ToList();
+                    var assignableTypes = assembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface)).ToList();
 
                     foreach (var type in assignableTypes)
                     {

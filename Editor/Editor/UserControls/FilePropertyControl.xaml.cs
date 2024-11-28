@@ -97,5 +97,10 @@ namespace Editor.UserControls
                 PropertyValue = fileDialog.FileName;
             }
         }
+
+        private void ClearFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            PropertyValue = null;
+        }
     }
 }

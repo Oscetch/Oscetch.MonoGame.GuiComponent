@@ -63,7 +63,8 @@ namespace Editor.ViewModels
                 {
                     ChildControls = parameters,
                     IsVisible = true,
-                    IsEnabled = true
+                    IsEnabled = true,
+                    SpriteFont = Settings.GetSettings().FontPath
                 };
                 EditorViewModel.ResetWithParameters(newBase);
             }
