@@ -17,6 +17,8 @@
             <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
             <TextBox Margin="5" Grid.Row="2" x:Name="ValueTextBox" 
                         Text="{Binding PropertyValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
                         VerticalContentAlignment="Center" />
         </Grid>
     </Border>

@@ -102,6 +102,12 @@ namespace Editor.ViewModels
             }
         }
 
+        public ICommand LeftAlignTextCommand { get; }
+        public ICommand TopAlignTextCommand { get; }
+        public ICommand RightAlignTextCommand { get; }
+        public ICommand BottomAlignTextCommand { get; }
+        public ICommand ScaleTextToBoundsCommand { get; }
+
         public float GuiControlPositionX
         {
             get => _editorViewModel.SelectedParameters?.Position.X ?? 0f;
@@ -331,6 +337,79 @@ namespace Editor.ViewModels
             _editorViewModel.SelectedControlSizeUpdated += EditorViewModel_SelectedControlSizeUpdated;
 
             EditScriptsCommand = new CommandHandler(OnEditScriptsClicked);
+            LeftAlignTextCommand = new CommandHandler(OnLeftAlignTextClicked);
+            RightAlignTextCommand = new CommandHandler(OnRightAlignTextClicked);
+            TopAlignTextCommand = new CommandHandler(OnTopAlignTextClicked);
+            BottomAlignTextCommand = new CommandHandler(OnBottomAlignTextClicked);
+            ScaleTextToBoundsCommand = new CommandHandler(OnScaleTextToBounds);
+        }
+
+        private void OnScaleTextToBounds() 
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null || string.IsNullOrEmpty(p.Text))
+            {
+                return;
+            }
+            var textSize = _editorViewModel.SelectedTextSizeWithoutScale();
+            var widthFraction = p.Size.X / textSize.X;
+            var heightFraction = p.Size.Y / textSize.Y;
+
+            var smallestFraction = Math.Min(widthFraction, heightFraction);
+            p.TextScale = smallestFraction;
+            OnPropertyChanged(nameof(GuiControlTextScale));
+        }
+
+        private void OnBottomAlignTextClicked()
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null || string.IsNullOrEmpty(p.Text))
+            {
+                return;
+            }
+            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
+
+            p.TextPosition = new Vector2(p.TextPosition.X, p.Position.Y + p.Size.Y - (textSize.Y / 2));
+            OnPropertyChanged(nameof(GuiControlTextPositionY));
+        }
+
+        private void OnTopAlignTextClicked()
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null || string.IsNullOrEmpty(p.Text))
+            {
+                return;
+            }
+            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
+
+            p.TextPosition = new Vector2(p.TextPosition.X, p.Position.Y + (textSize.Y / 2));
+            OnPropertyChanged(nameof(GuiControlTextPositionY));
+        }
+
+        private void OnRightAlignTextClicked()
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null || string.IsNullOrEmpty(p.Text))
+            {
+                return;
+            }
+            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
+
+            p.TextPosition = new Vector2(p.Position.X + p.Size.X - (textSize.X / 2), p.TextPosition.Y);
+            OnPropertyChanged(nameof(GuiControlTextPositionX));
+        }
+
+        private void OnLeftAlignTextClicked() 
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null || string.IsNullOrEmpty(p.Text))
+            {
+                return;
+            }
+            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
+
+            p.TextPosition = new Vector2(p.Position.X + (textSize.X / 2), p.TextPosition.Y);
+            OnPropertyChanged(nameof(GuiControlTextPositionX));
         }
 
         private void OnEditScriptsClicked()

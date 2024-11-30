@@ -465,6 +465,12 @@ namespace Editor.ViewModels
             }
         }
 
+        public Vector2 SelectedTextSizeWithoutScale() 
+        {
+            if (SelectedControl == null || string.IsNullOrEmpty(SelectedControl.Text)) return Vector2.Zero;
+            return SelectedControl.SpriteFont.MeasureString(SelectedControl.Text);
+        }
+
         public void RemoveControl(ulong id)
         {
             if (id == _customControl.Id)

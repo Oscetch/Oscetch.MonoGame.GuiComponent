@@ -38,6 +38,31 @@
                 PropertyValue="{Binding GuiControlText, Mode=TwoWay}"
                 x:Name="TextPropertyControl"
                     />
+            <local:ButtonPropertyControl 
+                Title="Left Align Text"
+                ButtonText="Left Align"
+                ButtonCommand="{Binding LeftAlignTextCommand}"
+                />
+            <local:ButtonPropertyControl 
+                Title="Right Align Text"
+                ButtonText="Right Align"
+                ButtonCommand="{Binding RightAlignTextCommand}"
+                />
+            <local:ButtonPropertyControl 
+                Title="Top Align Text"
+                ButtonText="Top Align"
+                ButtonCommand="{Binding TopAlignTextCommand}"
+                />
+            <local:ButtonPropertyControl 
+                Title="Bottom Align Text"
+                ButtonText="Bottom Align"
+                ButtonCommand="{Binding BottomAlignTextCommand}"
+                />
+            <local:ButtonPropertyControl 
+                Title="Scale Text To Bounds"
+                ButtonText="Scale"
+                ButtonCommand="{Binding ScaleTextToBoundsCommand}"
+                />
             <local:FilePropertyControl
                 Title="Background Texture"
                 Description="The texture that should be rendered inside this control"

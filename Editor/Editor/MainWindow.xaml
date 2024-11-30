@@ -9,6 +9,8 @@
     mc:Ignorable="d"
     Title="Editor" 
     WindowStartupLocation="CenterScreen"
+    WindowStyle="SingleBorderWindow"
+    WindowState="Maximized"
     Width="800"
     Height="480">
     <Window.DataContext>
