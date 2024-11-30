@@ -18,8 +18,6 @@ using System.Windows.Input;
 using System.Windows;
 using Point = Microsoft.Xna.Framework.Point;
 using Oscetch.MonoGame.GuiComponent.Interfaces;
-using Microsoft.Xna.Framework.Content;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace Editor.ViewModels
 {
@@ -875,11 +873,33 @@ namespace Editor.ViewModels
             _spriteBatch.End();
         }
 
+        private bool _isActive;
+        private App _application;
+        private bool GetIsActive() 
+        {
+            _application ??= Application.Current as App;
+            return _isActive && _application.MainWindow.IsActive;
+        }
+
+        public override void OnActivated(object sender, EventArgs args)
+        {
+            _isActive = true;
+        }
+
+        public override void OnDeactivated(object sender, EventArgs args)
+        {
+            _keyboard.Clear();
+            _isActive = false;
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            _keyboard.Update();
+            if (GetIsActive())
+            {
+                _keyboard.Update();
+            }
 
             if (_cameraHandler.ScreenWidth != GraphicsDevice.Viewport.Width 
                 || _cameraHandler.ScreenHeight != GraphicsDevice.Viewport.Height)

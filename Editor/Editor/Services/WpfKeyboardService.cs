@@ -30,6 +30,12 @@ namespace Editor.Services
             }
         }
 
+        public void Clear()
+        {
+            _previousKeys.Clear();
+            _currentKeys.Clear();
+        }
+
         public bool IsKeyDown(Key key)
         {
             return _currentKeys.Contains(key);
