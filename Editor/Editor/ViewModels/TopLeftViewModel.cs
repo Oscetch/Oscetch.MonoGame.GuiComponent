@@ -1,6 +1,13 @@
 ﻿using Editor.Handlers;
+using Microsoft.Win32;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using Oscetch.MonoGame.GuiComponent.Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Editor.ViewModels
@@ -11,6 +18,7 @@ namespace Editor.ViewModels
 
         public ICommand SelectParentCommand { get; }
         public ICommand CreateNewControlCommand { get; }
+        public ICommand ImportCanvasCommand { get; }
 
         public TopLeftViewModel(EditorViewModel editorViewModel)
         {
@@ -18,6 +26,7 @@ namespace Editor.ViewModels
             SelectParentCommand = new CommandHandler(_editorViewModel.SelectParent, () => _editorViewModel.IsInitialized
                 && _editorViewModel.SelectedParameters != null);
             CreateNewControlCommand = new CommandHandler(CreateChildControl, () => _editorViewModel.IsInitialized);
+            ImportCanvasCommand = new CommandHandler(ImportCanvas, () => _editorViewModel.IsInitialized);
         }
 
         private void CreateChildControl()
@@ -42,6 +51,40 @@ namespace Editor.ViewModels
             }
 
             _editorViewModel.ResetWithParameters(_editorViewModel.Parameters);
+        }
+
+        private void ImportCanvas() 
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON file(*.json)|*.json"
+            };
+            if (!(openFileDialog.ShowDialog() ?? false))
+            {
+                return;
+            }
+
+            try
+            {
+
+                var json = File.ReadAllText(openFileDialog.FileName);
+                var parameters = JsonConvert.DeserializeObject<List<GuiControlParameters>>(json);
+                if (_editorViewModel.SelectedParameters == null)
+                {
+                    _editorViewModel.Parameters.ChildControls.AddRange(parameters);
+                }
+                else
+                {
+                    _editorViewModel.SelectedParameters.ChildControls.AddRange(parameters);
+                }
+
+                _editorViewModel.ResetWithParameters(_editorViewModel.Parameters);
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e);
+                MessageBox.Show("Could not load file");
+            }
         }
     }
 }

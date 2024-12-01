@@ -38,6 +38,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
             <usercontrols:LeftPanelView Grid.Column="0"
@@ -46,6 +47,7 @@
                                  EditorViewModel="{Binding EditorViewModel}"
                                  HorizontalContentAlignment="Stretch" 
                                  VerticalAlignment="Stretch" />
+            <usercontrols:ControlTreeView Grid.Column="2" ControlTreeViewModel="{Binding ControlTreeViewModel}" />
         </Grid>
     </DockPanel>
 </Window>

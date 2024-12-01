@@ -17,6 +17,7 @@ namespace Editor.ViewModels
     {
         public EditorViewModel EditorViewModel { get; }
         public LeftPanelViewModel LeftPanelViewModel { get; }
+        public ControlTreeViewModel ControlTreeViewModel { get; }
 
         public ICommand CreateScriptCommand { get; }
         public ICommand EditScriptCommand { get; }
@@ -32,6 +33,7 @@ namespace Editor.ViewModels
         {
             EditorViewModel = new EditorViewModel();
             LeftPanelViewModel = new LeftPanelViewModel(EditorViewModel);
+            ControlTreeViewModel = new ControlTreeViewModel(EditorViewModel);
 
             CreateScriptCommand = new CommandHandler(OpenScriptControl);
             EditScriptCommand = new CommandHandler(OnEditScript);

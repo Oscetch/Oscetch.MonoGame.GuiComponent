@@ -13,5 +13,8 @@
         <Button Margin="5" Command="{Binding SelectParentCommand}">
             Select Parent
         </Button>
+        <Button Margin="5" Command="{Binding ImportCanvasCommand}">
+            Import Canvas
+        </Button>
     </StackPanel>
 </UserControl>

@@ -483,6 +483,7 @@ namespace Editor.ViewModels
                     SelectedControl = null;
                 }
                 result.Remove();
+                ResetWithParameters(Parameters);
             }
         }
 
@@ -531,6 +532,7 @@ namespace Editor.ViewModels
             _showIndicator = false;
             _customControl = new GuiControl<IGameToGuiService>(parameters, null);
             _customControl.LoadContent(Content, GraphicsDevice, _drawableBoundsRect.Size.ToVector2());
+            OnReset?.Invoke(this, EventArgs.Empty);
         }
 
         public void SelectParent()
@@ -951,7 +953,6 @@ namespace Editor.ViewModels
             if (IsKeyClicked(Key.Delete))
             {
                 RemoveSelected();
-                ControlChildrenUpdated?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -974,7 +975,7 @@ namespace Editor.ViewModels
             _alignmentIndicators.AddRange(CheckForAlignment(bounds, _drawableBoundsRect, Configuration.AlignmentIndicationWidth));
         }
 
-        public event EventHandler ControlChildrenUpdated;
+        public event EventHandler OnReset;
         public event EventHandler SelectedControlChanged;
         public event EventHandler SelectedControlSizeUpdated;
         public event EventHandler SelectedControlPositionUpdated;
