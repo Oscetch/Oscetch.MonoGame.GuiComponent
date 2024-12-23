@@ -945,7 +945,7 @@ namespace Editor.ViewModels
             if (_copyParameters != null
                    && AreKeysClicked(Key.LeftCtrl, Key.V))
             {
-                Parameters.ChildControls.Add(_copyParameters.Copy());
+                SelectedParameters.ChildControls.Add(_copyParameters.Copy());
                 ResetWithParameters(Parameters);
                 return;
             }
