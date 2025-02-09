@@ -324,6 +324,21 @@ namespace Editor.ViewModels
             }
         }
 
+        public bool GuiControlClip
+        {
+            get => _editorViewModel.SelectedParameters?.Clip ?? false;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null)
+                {
+                    return;
+                }
+
+                _editorViewModel.SelectedParameters.Clip = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand EditScriptsCommand { get; }
 
         public ControlPropertiesViewModel(EditorViewModel editorViewModel)
@@ -484,6 +499,7 @@ namespace Editor.ViewModels
             OnPropertyChanged(nameof(GuiControlHasBorder));
             OnPropertyChanged(nameof(GuiControlBorderColor));
             OnPropertyChanged(nameof(GuiControlIsModal));
+            OnPropertyChanged(nameof(GuiControlClip));
         }
 
         private void EditorViewModel_SelectedControlSizeUpdated(object sender, EventArgs e)

@@ -182,6 +182,14 @@
                 x:Name="IsModalPropertyControl"
                 />
             </Expander>
+            <Expander Header="Clip" ExpandDirection="Down" IsExpanded="False">
+                <local:BooleanPropertyControl
+                Title="Clip"
+                Description="Makes it so that this control clips all its children to its bounds"
+                PropertyValue="{Binding GuiControlClip, Mode=TwoWay}"
+                x:Name="ClipPropertyControl"
+                />
+            </Expander>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

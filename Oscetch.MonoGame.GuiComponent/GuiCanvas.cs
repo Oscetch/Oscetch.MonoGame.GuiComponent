@@ -54,6 +54,7 @@ namespace Oscetch.MonoGame.GuiComponent
         {
             try
             {
+                GuiControl<T>.GraphicsDevice = graphicsDevice;
                 var controlParameters = JsonConvert.DeserializeObject<List<GuiControlParameters>>(File.ReadAllText(_parametersFilePath));
 
                 var nonVisibleIndexesQueue = new Queue<int>();

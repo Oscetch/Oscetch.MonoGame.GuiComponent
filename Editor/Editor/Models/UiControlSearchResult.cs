@@ -14,11 +14,11 @@ namespace Editor.Models
 
         public GuiControl<IGameToGuiService> Control => _parent.Children[_index];
 
-        public void Update(GuiControlParameters parameters, ContentManager contentManager, GraphicsDevice graphicsDevice, 
+        public void Update(GuiControlParameters parameters, ContentManager contentManager, 
             Vector2 resolution)
         {
             GuiControl<IGameToGuiService> newChild = new(parameters, null);
-            newChild.LoadContent(contentManager, graphicsDevice, resolution);
+            newChild.LoadContent(contentManager, resolution);
             _parent.ReplaceChild(newChild, _index);
         }
 

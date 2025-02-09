@@ -522,7 +522,7 @@ namespace Editor.ViewModels
                 return;
             }
 
-            searchResult.Update(parameters, Content, GraphicsDevice, _drawableBoundsRect.Size.ToVector2());
+            searchResult.Update(parameters, Content, _drawableBoundsRect.Size.ToVector2());
             SelectedControl = searchResult.Control;
         }
 
@@ -531,7 +531,7 @@ namespace Editor.ViewModels
             SelectedControl = null;
             _showIndicator = false;
             _customControl = new GuiControl<IGameToGuiService>(parameters, null);
-            _customControl.LoadContent(Content, GraphicsDevice, _drawableBoundsRect.Size.ToVector2());
+            _customControl.LoadContent(Content, _drawableBoundsRect.Size.ToVector2());
             OnReset?.Invoke(this, EventArgs.Empty);
         }
 
@@ -808,6 +808,10 @@ namespace Editor.ViewModels
             SetConfiguration(UiBuilderConfigurationHelper.GetConfiguration("default"));
             var fontPath = Settings.GetSettings().FontPath;
             _font = Content.Load<SpriteFont>(fontPath);
+
+            typeof(GuiControl<IGameToGuiService>)
+                .GetProperty(nameof(GuiControl<IGameToGuiService>.GraphicsDevice))
+                .SetValue(null, GraphicsDevice);
 
             IsInitialized = true;
             _customControl = new GuiControl<IGameToGuiService>(new GuiControlParameters(_drawableBoundsRect.Size.ToVector2()) 

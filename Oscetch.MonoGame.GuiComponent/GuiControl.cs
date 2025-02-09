@@ -29,12 +29,20 @@ namespace Oscetch.MonoGame.GuiComponent
 
         public ulong Id { get; }
 
+
+        public static GraphicsDevice GraphicsDevice { get; internal set; }
         public GuiControlParameters Parameters { get; }
         public IReadOnlyList<GuiControl<T>> Children => _children;
         public Texture2D Background { get; set; }
         public List<IGuiScript<T>> LoadedScripts { get; private set; }
         public string Name => Parameters.Name;
         public SpriteFont SpriteFont { get; set; }
+        public bool Clip
+        {
+            get => Parameters.Clip;
+            set => Parameters.Clip = value;
+        }
+
         public string Text
         {
             get => Parameters.Text;
@@ -351,9 +359,9 @@ namespace Oscetch.MonoGame.GuiComponent
             Background = Texture2D.FromStream(graphicsDevice, fileStream);
         }
 
-        public void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice, Vector2 resolution)
+        public void LoadContent(ContentManager contentManager, Vector2 resolution)
         {
-            LoadBackground(contentManager, graphicsDevice, Parameters.BackgroundTexture2DPath);
+            LoadBackground(contentManager, GraphicsDevice, Parameters.BackgroundTexture2DPath);
 
             if (GameToGuiService != null)
             {
@@ -373,7 +381,7 @@ namespace Oscetch.MonoGame.GuiComponent
                 }
             }
 
-            BorderTexture = new Texture2D(graphicsDevice, 1, 1);
+            BorderTexture = new Texture2D(GraphicsDevice, 1, 1);
             BorderTexture.SetData(new[] { Color.White });
 
             Parameters.UpdateResolution(resolution);
@@ -382,7 +390,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
             foreach (var child in Children)
             {
-                child.LoadContent(contentManager, graphicsDevice, resolution);
+                child.LoadContent(contentManager, resolution);
             }
 
             if (GameToGuiService == null)
@@ -392,7 +400,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
             foreach (var script in LoadedScripts)
             {
-                script.Initialize(this, contentManager, graphicsDevice, GameToGuiService);
+                script.Initialize(this, contentManager, GraphicsDevice, GameToGuiService);
             }
         }
 
@@ -451,33 +459,13 @@ namespace Oscetch.MonoGame.GuiComponent
                 return;
             }
 
-            if (Background != null)
+            if (Clip)
             {
-                spriteBatch.Draw(Background, Bounds, Color.White);
+                DrawClipped(spriteBatch, cameraHandler);
             }
-
-            if (!string.IsNullOrEmpty(Text))
+            else
             {
-                if (Parameters.CenterText)
-                {
-                    TextPosition = Bounds.Center.ToVector2();
-                }
-
-                spriteBatch.DrawString(SpriteFont, Text, TextPosition, TextColor,
-                    TextRotation, SpriteFont.MeasureString(Text) / 2, TextScale, SpriteEffects.None, 0);
-            }
-
-            if (HasBorder && _borderLines.Count > 0 && BorderTexture != null)
-            {
-                foreach (var line in _borderLines)
-                {
-                    DrawLine(line, spriteBatch, cameraHandler);
-                }
-            }
-
-            foreach (var child in Children)
-            {
-                child.Draw(spriteBatch, cameraHandler);
+                DrawRaw(spriteBatch, cameraHandler);
             }
         }
 
@@ -529,6 +517,54 @@ namespace Oscetch.MonoGame.GuiComponent
             {
                 _borderLines.Clear();
                 _borderLines.AddRange(Bounds.ToLines());
+            }
+        }
+
+        private void DrawClipped(SpriteBatch spriteBatch, CameraHandler cameraHandler)
+        {
+            var rasterizerState = new RasterizerState { ScissorTestEnable = true };
+            spriteBatch.End();
+
+            spriteBatch.Begin(rasterizerState: rasterizerState, transformMatrix: cameraHandler.ViewMatrix);
+            var currentScissors = GraphicsDevice.ScissorRectangle;
+            GraphicsDevice.ScissorRectangle = cameraHandler.WorldBoundsToScreenBounds(Bounds);
+            DrawRaw(spriteBatch, cameraHandler);
+            spriteBatch.End();
+
+
+            spriteBatch.Begin(transformMatrix: cameraHandler.ViewMatrix);
+            GraphicsDevice.ScissorRectangle = currentScissors;
+        }
+
+        private void DrawRaw(SpriteBatch spriteBatch, CameraHandler cameraHandler)
+        {
+            if (Background != null)
+            {
+                spriteBatch.Draw(Background, Bounds, Color.White);
+            }
+
+            if (!string.IsNullOrEmpty(Text))
+            {
+                if (Parameters.CenterText)
+                {
+                    TextPosition = Bounds.Center.ToVector2();
+                }
+
+                spriteBatch.DrawString(SpriteFont, Text, TextPosition, TextColor,
+                    TextRotation, SpriteFont.MeasureString(Text) / 2, TextScale, SpriteEffects.None, 0);
+            }
+
+            if (HasBorder && _borderLines.Count > 0 && BorderTexture != null)
+            {
+                foreach (var line in _borderLines)
+                {
+                    DrawLine(line, spriteBatch, cameraHandler);
+                }
+            }
+
+            foreach (var child in Children)
+            {
+                child.Draw(spriteBatch, cameraHandler);
             }
         }
 

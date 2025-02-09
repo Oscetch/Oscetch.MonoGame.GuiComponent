@@ -20,6 +20,7 @@ namespace Oscetch.MonoGame.GuiComponent.Models
         public bool CenterText { get; set; }
         public bool IsVisible { get; set; }
         public bool IsEnabled { get; set; }
+        public bool Clip { get; set; } = false;
         public string BackgroundTexture2DPath { get; set; }
         public Color TextColor { get; set; } = Color.White;
         public string Text { get; set; }
@@ -65,7 +66,8 @@ namespace Oscetch.MonoGame.GuiComponent.Models
                 TextRotation = TextRotation,
                 BorderColor = BorderColor,
                 HasBorder = HasBorder,
-                IsModal = IsModal
+                IsModal = IsModal,
+                Clip = Clip,
             };
         }
 
