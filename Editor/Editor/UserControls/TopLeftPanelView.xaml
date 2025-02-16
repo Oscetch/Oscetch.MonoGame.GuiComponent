@@ -16,5 +16,8 @@
         <Button Margin="5" Command="{Binding ImportCanvasCommand}">
             Import Canvas
         </Button>
+        <Button Margin="5" Command="{Binding MoveSelectedCommand}">
+            Move Selected
+        </Button>
     </StackPanel>
 </UserControl>

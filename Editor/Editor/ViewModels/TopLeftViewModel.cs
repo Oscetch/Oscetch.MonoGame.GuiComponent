@@ -1,4 +1,5 @@
 ﻿using Editor.Handlers;
+using Editor.Modals;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,6 +21,7 @@ namespace Editor.ViewModels
         public ICommand SelectParentCommand { get; }
         public ICommand CreateNewControlCommand { get; }
         public ICommand ImportCanvasCommand { get; }
+        public ICommand MoveSelectedCommand { get; }
 
         public TopLeftViewModel(EditorViewModel editorViewModel)
         {
@@ -27,6 +30,9 @@ namespace Editor.ViewModels
                 && _editorViewModel.SelectedParameters != null);
             CreateNewControlCommand = new CommandHandler(CreateChildControl, () => _editorViewModel.IsInitialized);
             ImportCanvasCommand = new CommandHandler(ImportCanvas, () => _editorViewModel.IsInitialized);
+
+            MoveSelectedCommand = new CommandHandler(MoveSelected, () => _editorViewModel.IsInitialized
+                && _editorViewModel.SelectedParameters != null);
         }
 
         private void CreateChildControl()
@@ -84,6 +90,32 @@ namespace Editor.ViewModels
             {
                 Debug.Write(e);
                 MessageBox.Show("Could not load file");
+            }
+        }
+    
+        private void MoveSelected()
+        {
+            var selected = _editorViewModel.SelectedParameters;
+            var all = _editorViewModel.GetAllExceptSelected();
+            var dialog = new MoveDialog(all);
+            if (dialog.ShowDialog() != true) return;
+            var newlySelected = dialog.Selected.Control;
+            _editorViewModel.RemoveSelected();
+            newlySelected.Parameters.ChildControls.Add(selected);
+            _editorViewModel.ResetWithParameters(_editorViewModel.Parameters);
+        }
+
+        private IEnumerable<GuiControlParameters> AllParametersExcept(GuiControlParameters current, GuiControlParameters except)
+        {
+            if (current.Name == except.Name) yield break;
+
+            yield return current;
+            foreach (var child in current.ChildControls)
+            {
+                foreach (var c in AllParametersExcept(child, except))
+                {
+                    yield return c;
+                }
             }
         }
     }

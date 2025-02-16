@@ -5,7 +5,6 @@ using Oscetch.MonoGame.GuiComponent.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Oscetch.MonoGame.GuiComponent.Models;
 using System.Diagnostics;
@@ -96,26 +95,6 @@ namespace Oscetch.MonoGame.GuiComponent
             {
                 control.Unload();
             }
-        }
-
-        private static bool FindControlByName(GuiControl<T> control, string nameToSearchFor, out GuiControl<T> customControl)
-        {
-            if (control.Name == nameToSearchFor)
-            {
-                customControl = control;
-                return true;
-            }
-
-            foreach (var childControl in control.Children)
-            {
-                if (FindControlByName(childControl, nameToSearchFor, out customControl))
-                {
-                    return true;
-                }
-            }
-
-            customControl = null;
-            return false;
         }
 
         private void SwitchModal(GuiControl<T> newModal)

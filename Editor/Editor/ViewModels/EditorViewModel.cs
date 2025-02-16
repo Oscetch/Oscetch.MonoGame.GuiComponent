@@ -559,6 +559,9 @@ namespace Editor.ViewModels
             return [];
         }
 
+        public IEnumerable<GuiControl<IGameToGuiService>> GetAllExceptSelected() =>
+            GetAllControls(SelectedControl?.Id);
+
         public IEnumerable<GuiControl<IGameToGuiService>> GetAllControls(ulong? ignoreChildrenOf = null)
         {
             if (!ignoreChildrenOf.HasValue)
