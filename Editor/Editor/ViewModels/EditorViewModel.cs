@@ -212,7 +212,6 @@ namespace Editor.ViewModels
         private void UpdateSelectedControl()
         {
             SelectedControl = GetAllControls()
-                //.Where(x => GetControlHeriarchy(x.Id).All(c => c.IsVisible))
                 .Reverse()
                 .FirstOrDefault(x => x.Bounds.Contains(_mousePosition));
         }

@@ -17,7 +17,7 @@ namespace Oscetch.MonoGame.GuiComponent
     public class GuiCanvas<T> where T : IGameToGuiService
     {
         private readonly T _gameToGuiService;
-        private readonly string _parametersFilePath;
+        private readonly Func<List<GuiControlParameters>> _loadingFunction;
         private readonly DragAndDropService<T> _dragAndDropService;
 
         private GuiControl<T> _activeModal;
@@ -25,14 +25,17 @@ namespace Oscetch.MonoGame.GuiComponent
         public List<GuiControl<T>> Controls { get; } = [];
         public bool IsMouseOverControl { get; private set; }
 
-        public GuiCanvas(string parametersFilePath, T gameToGuiService)
+        public GuiCanvas(string parametersFilePath, T gameToGuiService) : this(() =>
+        {
+            return File.Exists(parametersFilePath)
+                ? JsonConvert.DeserializeObject<List<GuiControlParameters>>(File.ReadAllText(parametersFilePath))
+                : [];
+        }, gameToGuiService) { }
+
+        public GuiCanvas(Func<List<GuiControlParameters>> loadingFunction, T gameToGuiService)
         {
             _gameToGuiService = gameToGuiService;
-            _parametersFilePath = parametersFilePath;
-            if (!File.Exists(parametersFilePath))
-            {
-                File.WriteAllText(parametersFilePath, JsonConvert.SerializeObject(new List<GuiControlParameters>()));
-            }
+            _loadingFunction = loadingFunction;
             _dragAndDropService = new DragAndDropService<T>(this);
         }
 
@@ -54,7 +57,7 @@ namespace Oscetch.MonoGame.GuiComponent
             try
             {
                 GuiControl<T>.GraphicsDevice = graphicsDevice;
-                var controlParameters = JsonConvert.DeserializeObject<List<GuiControlParameters>>(File.ReadAllText(_parametersFilePath));
+                var controlParameters = _loadingFunction();
 
                 var nonVisibleIndexesQueue = new Queue<int>();
                 for (var i = 0; i < controlParameters.Count; i++)
