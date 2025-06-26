@@ -382,7 +382,7 @@ namespace Oscetch.MonoGame.GuiComponent
             }
 
             BorderTexture = new Texture2D(GraphicsDevice, 1, 1);
-            BorderTexture.SetData(new[] { Color.White });
+            BorderTexture.SetData([Color.White]);
 
             Parameters.UpdateResolution(resolution);
 
@@ -430,7 +430,7 @@ namespace Oscetch.MonoGame.GuiComponent
             }
 
             BorderTexture = new Texture2D(graphicsDevice, 1, 1);
-            BorderTexture.SetData(new[] { Color.White });
+            BorderTexture.SetData([Color.White]);
 
             Parameters.UpdateResolution(graphicsDevice.Viewport.Bounds.Size.ToVector2());
 
