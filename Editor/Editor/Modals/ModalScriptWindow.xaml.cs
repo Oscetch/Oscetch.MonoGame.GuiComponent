@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.Completion;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using Oscetch.ScriptComponent;
+using Oscetch.ScriptComponent.Compiler;
 using Oscetch.ScriptComponent.Compiler.Extensions;
 using System;
 using System.Collections.Generic;
