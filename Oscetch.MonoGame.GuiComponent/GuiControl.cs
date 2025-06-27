@@ -385,6 +385,7 @@ namespace Oscetch.MonoGame.GuiComponent
             BorderTexture.SetData([Color.White]);
 
             Parameters.UpdateResolution(resolution);
+            UpdateBorder();
 
             SpriteFont = contentManager.Load<SpriteFont>(Parameters.SpriteFont);
 
@@ -433,6 +434,7 @@ namespace Oscetch.MonoGame.GuiComponent
             BorderTexture.SetData([Color.White]);
 
             Parameters.UpdateResolution(graphicsDevice.Viewport.Bounds.Size.ToVector2());
+            UpdateBorder();
 
             SpriteFont = contentManager.Load<SpriteFont>(Parameters.SpriteFont);
 
