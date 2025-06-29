@@ -6,7 +6,7 @@
     <Description>Library to act as a gui component for monogame</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +25,7 @@
     <PackageReference Include="Oscetch.MonoGame.Input.GL" Version="1.0.3" />
     <PackageReference Include="Oscetch.MonoGame.Math.GL" Version="1.0.3" />
     <PackageReference Include="Oscetch.MonoGame.Textures.GL" Version="1.0.5" />
-    <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.3" />
+    <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

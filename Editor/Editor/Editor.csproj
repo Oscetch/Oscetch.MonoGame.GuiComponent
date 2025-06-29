@@ -12,7 +12,7 @@
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4" />
     <PackageReference Include="Ninject" Version="3.3.6" />
     <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.5" />
-    <PackageReference Include="Oscetch.ScriptComponent.Compiler" Version="1.0.3" />
+    <PackageReference Include="Oscetch.ScriptComponent.Compiler" Version="1.0.4" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.4.2" />
   </ItemGroup>
 

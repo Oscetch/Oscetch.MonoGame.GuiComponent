@@ -89,7 +89,7 @@
                 PropertyValue="{Binding GuiControlBackground, Mode=TwoWay}"
                 />
             </Expander>
-            <Expander Header="Background Custom" ExpandDirection="Down" IsExpanded="True">
+            <Expander Header="Background Custom" ExpandDirection="Down" IsExpanded="False">
                 <local:CustomTextureParametersPropertyControl 
                     Title="Custom Background Texture"
                     Description="The texture that should be rendered inside this control"
@@ -204,6 +204,27 @@
                 PropertyValue="{Binding GuiControlClip, Mode=TwoWay}"
                 x:Name="ClipPropertyControl"
                 />
+            </Expander>
+            <Expander Header="Script Parameters" ExpandDirection="Down" IsExpanded="False">
+                <ListBox ItemsSource="{Binding ScriptParameters}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock TextAlignment="Right" VerticalAlignment="Center" Margin="5" Text="{Binding Name, Mode=OneWay}" />
+                                <TextBox Grid.Column="1" 
+                                    Margin="5" 
+                                    VerticalContentAlignment="Center" 
+                                    Text="{Binding Value, Mode=TwoWay}"
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Expander>
         </StackPanel>
     </ScrollViewer>

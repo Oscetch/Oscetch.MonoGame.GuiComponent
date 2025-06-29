@@ -1,13 +1,21 @@
 ﻿using Editor.Extensions;
 using Editor.Handlers;
 using Editor.Modals;
+using Editor.Models;
 using Microsoft.Xna.Framework;
+using Oscetch.MonoGame.GuiComponent.Models;
 using Oscetch.MonoGame.Textures;
 using Oscetch.MonoGame.Textures.Enums;
 using Oscetch.ScriptComponent;
+using Oscetch.ScriptComponent.Attributes;
+using Oscetch.ScriptComponent.Interfaces;
+using SharpDX.DirectWrite;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace Editor.ViewModels
@@ -15,6 +23,7 @@ namespace Editor.ViewModels
     public class ControlPropertiesViewModel : ViewModel
     {
         private readonly EditorViewModel _editorViewModel;
+        private ObservableCollection<ScriptValueParameterModel> _scriptValues;
 
         public string GuiControlName
         {
@@ -219,6 +228,16 @@ namespace Editor.ViewModels
                 }
 
                 _editorViewModel.SelectedParameters.Text = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ScriptValueParameterModel> ScriptParameters
+        {
+            get => _scriptValues;
+            set 
+            {
+                _scriptValues = value;
                 OnPropertyChanged();
             }
         }
@@ -590,6 +609,7 @@ namespace Editor.ViewModels
                         _editorViewModel.SelectedParameters.ControlScripts.Add(reference.ScriptReference);
                     }
                 }
+                OnScriptParametersChanged();
             }
         }
 
@@ -632,6 +652,19 @@ namespace Editor.ViewModels
             OnPropertyChanged(nameof(GuiControlIsModal));
             OnPropertyChanged(nameof(GuiControlClip));
             OnCustomTextureChanged();
+            OnScriptParametersChanged();
+        }
+
+        private void OnScriptParametersChanged()
+        {
+            if (_editorViewModel.SelectedParameters == null)
+            {
+                ScriptParameters = [];
+            }
+            else
+            {
+                ScriptParameters = new ObservableCollection<ScriptValueParameterModel>(GetScriptParameters(_editorViewModel.SelectedParameters));
+            }
         }
 
         private void OnCustomTextureChanged()
@@ -662,6 +695,61 @@ namespace Editor.ViewModels
         private void EditorViewModel_SelectedControlChanged(object sender, EventArgs e)
         {
             SyncEditor();
+        }
+
+        private static IEnumerable<ScriptValueParameterModel> GetScriptParameters(GuiControlParameters parameters)
+        {
+            var settings = Settings.GetSettings();
+
+            if (!File.Exists(settings.OutputPath)) yield break;
+            var baseScriptReferenceName = Path.GetFileName(settings.BaseScriptReference.DllPath);
+            var baseScriptAssembly = Assembly.LoadFrom(settings.BaseScriptReference.DllPath);
+            baseScriptAssembly.GetReferencedAssembliesAtPath(settings.BaseScriptReference.DllPath);
+            var assembly = Assembly.LoadFrom(settings.OutputPath);
+            assembly.GetReferencedAssembliesAtPath(settings.OutputPath);
+
+            var scriptInterface = typeof(IScript);
+            var assignableTypes = assembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
+            var builtInTypes = baseScriptAssembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
+
+            foreach (var reference in parameters.BuiltInScripts)
+            {
+                var type = baseScriptAssembly.GetType(reference.ScriptClassName);
+                var dict = reference.Params.ToDictionary(x => x.Name);
+                foreach (var scriptValue in GetScriptParameters(type, dict))
+                {
+                    yield return new ScriptValueParameterModel(reference, scriptValue);
+                }
+            }
+            foreach (var reference in parameters.ControlScripts)
+            {
+                var type = assembly.GetType(reference.ScriptClassName);
+                var dict = reference.Params.ToDictionary(x => x.Name);
+                foreach (var scriptValue in GetScriptParameters(type, dict))
+                {
+                    yield return new ScriptValueParameterModel(reference, scriptValue);
+                }
+            }
+        }
+
+        private static IEnumerable<ScriptValueParameter> GetScriptParameters(Type type, Dictionary<string, ScriptValueParameter> dict)
+        {
+            foreach (var field in type.GetFields())
+            {
+                foreach (var scriptParameter in field.GetCustomAttributes<ScriptParameter>())
+                {
+                    if (dict.TryGetValue(scriptParameter.Name, out var existingParam)) yield return existingParam;
+                    else yield return new ScriptValueParameter(scriptParameter.Name, "");
+                }
+            }
+            foreach (var property in type.GetProperties())
+            {
+                foreach (var scriptParameter in property.GetCustomAttributes<ScriptParameter>())
+                {
+                    if (dict.TryGetValue(scriptParameter.Name, out var existingParam)) yield return existingParam;
+                    else yield return new ScriptValueParameter(scriptParameter.Name, "");
+                }
+            }
         }
     }
 }
