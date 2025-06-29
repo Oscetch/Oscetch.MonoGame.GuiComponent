@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="Editor.UserControls.CustomTextureParametersPropertyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Editor.UserControls"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:StyleAlias="clr-namespace:Oscetch.MonoGame.Textures.Enums;assembly=Oscetch.MonoGame.Textures.DX" 
+             xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="StyleAlias:ShapeType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <TextBlock Margin="5" FontSize="20" TextWrapping="Wrap" x:Name="TitleTextBlock" />
+            <TextBlock Margin="5" Grid.Row="1" TextWrapping="Wrap" x:Name="DescriptionTextBlock" />
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" TextAlignment="Right" VerticalAlignment="Center">Shape:</TextBlock>
+                <ComboBox Grid.Column="1" Margin="5" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding PropertyShapeType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}" />
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextAlignment="Right" VerticalAlignment="Center" Margin="5">Width:</TextBlock>
+                <TextBox Grid.Column="1" 
+                     Margin="5" 
+                     VerticalContentAlignment="Center" 
+                     Text="{Binding PropertyWidthValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                     x:Name="WidthValueTextBox" />
+                <TextBlock TextAlignment="Right" VerticalAlignment="Center" Grid.Column="2" Margin="5">Height:</TextBlock>
+                <TextBox Grid.Column="3" 
+                     Margin="5" 
+                     Text="{Binding PropertyHeightValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                     VerticalContentAlignment="Center"
+                     x:Name="HeightValueTextBox" />
+            </Grid>
+            <Button Margin="5" 
+                    Grid.Row="4" 
+                    x:Name="ToControlSizeButton" 
+                    Content="{Binding ToControlSizeButtonText, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                    Command="{Binding ToControlSizeButtonCommand, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                    VerticalContentAlignment="Center" />
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" TextAlignment="Right" VerticalAlignment="Center">Color:</TextBlock>
+                <colorpicker:PortableColorPicker Margin="5" Grid.Column="1" BorderBrush="White" Height="30" BorderThickness="1" x:Name="FillColorPicker" />
+            </Grid>
+            <Grid Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" TextAlignment="Right" VerticalAlignment="Center">Corner Radius:</TextBlock>
+                <TextBox 
+                    Grid.Column="1" 
+                    Margin="5" 
+                    VerticalContentAlignment="Center" 
+                    x:Name="CornerRadiusTextBox"
+                    Text="{Binding PropertyCornerRadius, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                    />
+            </Grid>
+            <Grid Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" TextAlignment="Right" VerticalAlignment="Center">Border Thickness:</TextBlock>
+                <TextBox 
+                    Grid.Column="1" 
+                    Margin="5" 
+                    VerticalContentAlignment="Center" 
+                    x:Name="BorderThicknessTextBox"
+                    Text="{Binding PropertyBorderThickness, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}, Mode=TwoWay}"
+                    />
+            </Grid>
+
+            <Grid Grid.Row="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="5" TextAlignment="Right" VerticalAlignment="Center">Border Color:</TextBlock>
+                <colorpicker:PortableColorPicker Margin="5" Grid.Column="1" BorderBrush="White" Height="30" BorderThickness="1" x:Name="BorderColorPicker" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

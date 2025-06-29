@@ -338,30 +338,9 @@ namespace Oscetch.MonoGame.GuiComponent
             }
         }
 
-        private void LoadBackground(ContentManager contentManager, GraphicsDevice graphicsDevice, string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return;
-            }
-
-            if (!Path.HasExtension(path))
-            {
-                Background = contentManager.Load<Texture2D>(path);
-                return;
-            }
-            if (!File.Exists(path))
-            {
-                return;
-            }
-
-            using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            Background = Texture2D.FromStream(graphicsDevice, fileStream);
-        }
-
         public void LoadContent(ContentManager contentManager, Vector2 resolution)
         {
-            LoadBackground(contentManager, GraphicsDevice, Parameters.BackgroundTexture2DPath);
+            Background = Parameters.Background?.Load(contentManager, GraphicsDevice);
 
             if (GameToGuiService != null)
             {
@@ -407,10 +386,7 @@ namespace Oscetch.MonoGame.GuiComponent
 
         public void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
-            if (!string.IsNullOrEmpty(Parameters.BackgroundTexture2DPath))
-            {
-                Background = contentManager.Load<Texture2D>(Parameters.BackgroundTexture2DPath);
-            }
+            Background = Parameters.Background?.Load(contentManager, graphicsDevice);
 
             if (GameToGuiService != null)
             {

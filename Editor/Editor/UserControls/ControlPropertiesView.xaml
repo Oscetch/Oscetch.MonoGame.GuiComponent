@@ -89,6 +89,21 @@
                 PropertyValue="{Binding GuiControlBackground, Mode=TwoWay}"
                 />
             </Expander>
+            <Expander Header="Background Custom" ExpandDirection="Down" IsExpanded="True">
+                <local:CustomTextureParametersPropertyControl 
+                    Title="Custom Background Texture"
+                    Description="The texture that should be rendered inside this control"
+                    PropertyHeightValue="{Binding CustomTextureHeight, Mode=TwoWay}"
+                    PropertyWidthValue="{Binding CustomTextureWidth, Mode=TwoWay}"
+                    PropertyShapeType="{Binding CustomTextureShapeType, Mode=TwoWay}"
+                    PropertyColor="{Binding CustomTextureColor, Mode=TwoWay}"
+                    PropertyCornerRadius="{Binding CustomTextureCornerRadius, Mode=TwoWay}"
+                    ToControlSizeButtonText="Set size to control size"
+                    ToControlSizeButtonCommand="{Binding SetCustomTextureSizeToControlSize}"
+                    PropertyBorderThickness="{Binding CustomTextureBorderThickness, Mode=TwoWay}"
+                    PropertyBorderColor="{Binding CustomTextureBorder, Mode=TwoWay}"
+                    />
+            </Expander>
             <Expander Header="Position" ExpandDirection="Down" IsExpanded="False">
                 <local:Vector2PropertyControl
                 Title="Position"

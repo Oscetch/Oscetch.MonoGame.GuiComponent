@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Oscetch.MonoGame.GuiComponent.DX.Models;
 using Oscetch.ScriptComponent;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Oscetch.MonoGame.GuiComponent.Models
         public bool IsVisible { get; set; }
         public bool IsEnabled { get; set; }
         public bool Clip { get; set; } = false;
-        public string BackgroundTexture2DPath { get; set; }
+        public Background Background { get; set; }
         public Color TextColor { get; set; } = Color.White;
         public string Text { get; set; }
         public string SpriteFont { get; set; } = "Fonts/DefaultFont";
@@ -52,13 +53,13 @@ namespace Oscetch.MonoGame.GuiComponent.Models
                 TextPosition = TextPosition,
                 CenterText = CenterText,
                 Size = Size,
-                BackgroundTexture2DPath = BackgroundTexture2DPath,
+                Background = Background?.Copy(),
                 TextColor = TextColor,
                 Text = Text,
                 SpriteFont = SpriteFont,
-                ChildControls = ChildControls.Select(x => x.Copy()).ToList(),
-                ControlScripts = new List<ScriptReference>(ControlScripts),
-                BuiltInScripts = new List<ScriptReference>(BuiltInScripts),
+                ChildControls = [.. ChildControls.Select(x => x.Copy())],
+                ControlScripts = [.. ControlScripts],
+                BuiltInScripts = [.. BuiltInScripts],
                 IsEnabled = IsEnabled,
                 IsVisible = IsVisible,
                 Name = Name,

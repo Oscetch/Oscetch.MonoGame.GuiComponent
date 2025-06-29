@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -26,6 +26,7 @@
     <PackageReference Include="Oscetch.MonoGame.Extensions.KNI" Version="1.0.0" />
     <PackageReference Include="Oscetch.MonoGame.Input.kni" Version="1.0.0" />
     <PackageReference Include="Oscetch.MonoGame.Math.kni" Version="1.0.0" />
+    <PackageReference Include="Oscetch.MonoGame.Textures.KNI" Version="1.0.0" />
     <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.3" />
   </ItemGroup>
 

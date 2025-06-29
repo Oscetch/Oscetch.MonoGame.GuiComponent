@@ -24,6 +24,7 @@
     <PackageReference Include="Oscetch.MonoGame.Extensions.GL" Version="1.0.1" />
     <PackageReference Include="Oscetch.MonoGame.Input.GL" Version="1.0.3" />
     <PackageReference Include="Oscetch.MonoGame.Math.GL" Version="1.0.3" />
+    <PackageReference Include="Oscetch.MonoGame.Textures.GL" Version="1.0.5" />
     <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.3" />
   </ItemGroup>
 

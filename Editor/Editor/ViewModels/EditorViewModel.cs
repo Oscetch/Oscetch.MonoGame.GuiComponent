@@ -93,19 +93,12 @@ namespace Editor.ViewModels
         public void LoadSelected()
         {
             if (_selectedControl == null) return;
-            if (!string.IsNullOrEmpty(SelectedParameters.BackgroundTexture2DPath))
-            {
-                _selectedControl.Background = Content.Load<Texture2D>(SelectedParameters.BackgroundTexture2DPath);
-            }
-            else
-            {
-                _selectedControl.Background = null;
-            }
+            _selectedControl.Background = SelectedParameters.Background?.Load(Content, GraphicsDevice);
         }
 
         private void SetDrawableArea()
         {
-            _drawableBoundsRect = new Rectangle(0, 0, 1280, 720);
+            _drawableBoundsRect = new Rectangle(0, 0, 800, 640);
             Resolution = _drawableBoundsRect.Size.ToVector2();
             
             _cameraHandler = new CameraHandler(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)

@@ -29,6 +29,7 @@
     <PackageReference Include="Oscetch.MonoGame.Extensions.DX" Version="1.0.1" />
     <PackageReference Include="Oscetch.MonoGame.Input.DX" Version="1.0.3" />
     <PackageReference Include="Oscetch.MonoGame.Math.DX" Version="1.0.3" />
+    <PackageReference Include="Oscetch.MonoGame.Textures.DX" Version="1.0.5" />
     <PackageReference Include="Oscetch.ScriptComponent" Version="1.0.3" />
   </ItemGroup>
 

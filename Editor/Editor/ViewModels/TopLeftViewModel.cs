@@ -105,7 +105,7 @@ namespace Editor.ViewModels
             _editorViewModel.ResetWithParameters(_editorViewModel.Parameters);
         }
 
-        private IEnumerable<GuiControlParameters> AllParametersExcept(GuiControlParameters current, GuiControlParameters except)
+        private static IEnumerable<GuiControlParameters> AllParametersExcept(GuiControlParameters current, GuiControlParameters except)
         {
             if (current.Name == except.Name) yield break;
 

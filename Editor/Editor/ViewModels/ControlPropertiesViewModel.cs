@@ -1,11 +1,13 @@
-﻿using Editor.Handlers;
+﻿using Editor.Extensions;
+using Editor.Handlers;
 using Editor.Modals;
 using Microsoft.Xna.Framework;
+using Oscetch.MonoGame.Textures;
+using Oscetch.MonoGame.Textures.Enums;
 using Oscetch.ScriptComponent;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Editor.ViewModels
@@ -61,7 +63,7 @@ namespace Editor.ViewModels
 
         public string GuiControlBackground
         {
-            get => _editorViewModel.SelectedParameters?.BackgroundTexture2DPath ?? string.Empty;
+            get => _editorViewModel.SelectedParameters?.Background?.Path ?? string.Empty;
             set
             {
                 if (_editorViewModel.SelectedParameters == null)
@@ -71,19 +73,138 @@ namespace Editor.ViewModels
 
                 if (value == null)
                 {
-                    _editorViewModel.SelectedParameters.BackgroundTexture2DPath = null;
+                    _editorViewModel.SelectedParameters.Background = null;
                     _editorViewModel.LoadSelected();
-                } else
+                }
+                else
                 {
                     var extension = Path.GetExtension(value);
                     if (extension.Equals(".xnb", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        _editorViewModel.SelectedParameters.BackgroundTexture2DPath = Path.GetFileNameWithoutExtension(value);
+                        var settings = Settings.GetSettings();
+                        var relativePath = Path.GetRelativePath(settings.ContentPath, value);
+                        var fileName = Path.GetFileNameWithoutExtension(value);
+                        var parts = relativePath.Split(Path.DirectorySeparatorChar);
+                        parts[^1] = fileName;
+                        var finalPath = string.Join(Path.DirectorySeparatorChar, parts);
+                        _editorViewModel.SelectedParameters.Background = finalPath;
                         _editorViewModel.LoadSelected();
                     }
-
                 }
                 OnPropertyChanged();
+                OnCustomTextureChanged();
+            }
+        }
+
+        public int CustomTextureWidth
+        {
+            get => _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.Size.X ?? 0;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters = 
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithWidth(value).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public int CustomTextureHeight
+        {
+            get => _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.Size.Y ?? 0;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithHeight(value).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public ShapeType CustomTextureShapeType
+        {
+            get => _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ShapeType ?? ShapeType.RectangleCornerRadius;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithShape(value).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public System.Windows.Media.Color CustomTextureColor
+        {
+            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.FillColor ?? Color.Transparent);
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithFillColor(MediaColorToXnaColor(value)).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public int CustomTextureCornerRadius
+        {
+            get => _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.CornerRadius ?? 0;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithCornerRadius(value).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public int CustomTextureBorderThickness
+        {
+            get => _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.BorderThickness ?? 0;
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithBorderThickness(value).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
+            }
+        }
+
+        public System.Windows.Media.Color CustomTextureBorder
+        {
+            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.BorderColor ?? Color.Transparent);
+            set
+            {
+                if (_editorViewModel.SelectedParameters == null) return;
+                var parameters =
+                    _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
+                    ?? new CustomTextureParameters.CustomTextureParametersBuilder();
+                _editorViewModel.SelectedParameters.Background = parameters.WithBorderColor(MediaColorToXnaColor(value)).Build();
+                _editorViewModel.LoadSelected();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(GuiControlBackground));
             }
         }
 
@@ -107,6 +228,7 @@ namespace Editor.ViewModels
         public ICommand RightAlignTextCommand { get; }
         public ICommand BottomAlignTextCommand { get; }
         public ICommand ScaleTextToBoundsCommand { get; }
+        public ICommand SetCustomTextureSizeToControlSize { get; }
 
         public float GuiControlPositionX
         {
@@ -357,6 +479,15 @@ namespace Editor.ViewModels
             TopAlignTextCommand = new CommandHandler(OnTopAlignTextClicked);
             BottomAlignTextCommand = new CommandHandler(OnBottomAlignTextClicked);
             ScaleTextToBoundsCommand = new CommandHandler(OnScaleTextToBounds);
+            SetCustomTextureSizeToControlSize = new CommandHandler(OnSetCustomTextureSizeToControlSize);
+        }
+
+        private void OnSetCustomTextureSizeToControlSize()
+        {
+            var p = _editorViewModel.SelectedParameters;
+            if (p == null) return;
+            CustomTextureWidth = (int)p.Size.X;
+            CustomTextureHeight = (int)p.Size.Y;
         }
 
         private void OnScaleTextToBounds() 
@@ -500,6 +631,18 @@ namespace Editor.ViewModels
             OnPropertyChanged(nameof(GuiControlBorderColor));
             OnPropertyChanged(nameof(GuiControlIsModal));
             OnPropertyChanged(nameof(GuiControlClip));
+            OnCustomTextureChanged();
+        }
+
+        private void OnCustomTextureChanged()
+        {
+            OnPropertyChanged(nameof(CustomTextureHeight));
+            OnPropertyChanged(nameof(CustomTextureWidth));
+            OnPropertyChanged(nameof(CustomTextureShapeType));
+            OnPropertyChanged(nameof(CustomTextureColor));
+            OnPropertyChanged(nameof(CustomTextureCornerRadius));
+            OnPropertyChanged(nameof(CustomTextureBorderThickness));
+            OnPropertyChanged(nameof(CustomTextureBorder));
         }
 
         private void EditorViewModel_SelectedControlSizeUpdated(object sender, EventArgs e)
