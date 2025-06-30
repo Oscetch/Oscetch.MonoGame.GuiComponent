@@ -70,7 +70,7 @@ namespace Editor.ViewModels
                 };
                 EditorViewModel.ResetWithParameters(newBase);
             }
-            catch
+            catch (Exception e)
             {
                 MessageBox.Show("Could not load file");
             }

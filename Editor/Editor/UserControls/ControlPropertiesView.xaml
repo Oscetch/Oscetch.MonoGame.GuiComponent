@@ -206,8 +206,8 @@
                 />
             </Expander>
             <Expander Header="Script Parameters" ExpandDirection="Down" IsExpanded="False">
-                <ListBox ItemsSource="{Binding ScriptParameters}" >
-                    <ListBox.ItemTemplate>
+                <ItemsControl ItemsSource="{Binding ScriptParameters}" >
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -223,8 +223,8 @@
                                     />
                             </Grid>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Expander>
         </StackPanel>
     </ScrollViewer>
