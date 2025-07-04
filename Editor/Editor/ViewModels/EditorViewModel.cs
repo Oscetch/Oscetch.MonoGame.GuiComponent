@@ -801,7 +801,7 @@ namespace Editor.ViewModels
             SetDrawableArea();
 
             SetConfiguration(UiBuilderConfigurationHelper.GetConfiguration("default"));
-            var fontPath = Settings.GetSettings().FontPath;
+            var fontPath = ProjectSettings.GetSettings().FontPath;
             _font = Content.Load<SpriteFont>(fontPath);
 
             typeof(GuiControl<IGameToGuiService>)

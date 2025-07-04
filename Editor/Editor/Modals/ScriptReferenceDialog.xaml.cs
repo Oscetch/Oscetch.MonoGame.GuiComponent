@@ -18,13 +18,13 @@ namespace Editor.Modals
     /// </summary>
     public partial class ScriptReferenceDialog : Window
     {
-        private readonly Settings _settings;
+        private readonly ProjectSettings _settings;
 
         public ObservableCollection<ScriptReferenceCheckedModel> ScriptReferenceCheckedModels { get; set; }
 
         public ScriptReferenceDialog(List<ScriptReference> currentReferences)
         {
-            _settings = Settings.GetSettings();
+            _settings = ProjectSettings.GetSettings();
             InitializeComponent();
 
             Title = "Script References";
@@ -38,9 +38,9 @@ namespace Editor.Modals
             if (File.Exists(_settings.OutputPath))
             {
                 var outputFileName = Path.GetFileName(_settings.OutputPath);
-                var baseScriptReferenceName = Path.GetFileName(_settings.BaseScriptReference.DllPath);
-                var baseScriptAssembly = Assembly.LoadFrom(_settings.BaseScriptReference.DllPath);
-                baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.BaseScriptReference.DllPath);
+                var baseScriptReferenceName = Path.GetFileName(_settings.GameDllPath);
+                var baseScriptAssembly = Assembly.LoadFrom(_settings.GameDllPath);
+                baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.GameDllPath);
                 var assembly = Assembly.LoadFrom(_settings.OutputPath);
                 assembly.GetReferencedAssembliesAtPath(_settings.OutputPath);
 

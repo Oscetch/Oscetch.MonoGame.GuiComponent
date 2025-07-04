@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>dotnet-mgcb</id>
+    <version>3.8.4</version>
+    <authors>MonoGame Team</authors>
+    <license type="expression">MS-PL</license>
+    <licenseUrl>https://licenses.nuget.org/MS-PL</licenseUrl>
+    <icon>Icon.png</icon>
+    <projectUrl>https://www.monogame.net/</projectUrl>
+    <description>The MonoGame Content Builder (MGCB) command line tool is used for optimizing content for runtime use.</description>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+    <repository type="git" url="https://github.com/MonoGame/MonoGame" commit="caaa1170c48b8d340690014423e1c8bbc0777899" />
+  </metadata>
+</package>

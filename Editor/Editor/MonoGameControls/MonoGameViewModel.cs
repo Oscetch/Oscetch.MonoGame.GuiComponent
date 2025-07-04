@@ -48,7 +48,7 @@ namespace Editor.MonoGameControls
         {
             Services = new MonoGameServiceProvider();
             Services.AddService(GraphicsDeviceService);
-            Content = new ContentManager(Services) { RootDirectory = Settings.GetSettings().ContentPath };
+            Content = new ContentManager(Services) { RootDirectory = ProjectSettings.GetSettings().ContentBinPath };
         }
 
         public virtual void LoadContent() { }

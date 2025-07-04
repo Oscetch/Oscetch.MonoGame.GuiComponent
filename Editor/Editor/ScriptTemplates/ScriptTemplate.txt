@@ -3,14 +3,15 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Oscetch.MonoGame.Camera;
 using Oscetch.MonoGame.GuiComponent;
+using Oscetch.MonoGame.GuiComponent.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class ScriptTemplate : {0}
-{{
+public class ScriptTemplate : IGuiScript<GameToGuiService>
+{
     private GuiControl<GameToGuiService> _control;
     private GameToGuiService _gameToGuiService;
 
@@ -18,12 +19,12 @@ public class ScriptTemplate : {0}
         ContentManager contentManager,
         GraphicsDevice graphicsDevice,
         GameToGuiService gameToGuiService)
-    {{
+    {
         _control = control;
         _gameToGuiService = gameToGuiService;
-    }}
+    }
 
     public override void Update(GameTime gameTime, CameraHandler cameraHandler)
-    {{
-    }}
-}}
+    {
+    }
+}

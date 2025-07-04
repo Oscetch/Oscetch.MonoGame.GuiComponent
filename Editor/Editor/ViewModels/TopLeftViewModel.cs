@@ -44,7 +44,7 @@ namespace Editor.ViewModels
                 TextPosition = _editorViewModel.CenterOfScreen,
                 HasBorder = true,
                 BorderColor = Color.White,
-                SpriteFont = Settings.GetSettings().FontPath
+                SpriteFont = ProjectSettings.GetSettings().FontPath
             };
 
             if (_editorViewModel.SelectedParameters == null)

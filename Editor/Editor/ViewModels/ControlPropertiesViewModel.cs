@@ -90,8 +90,8 @@ namespace Editor.ViewModels
                     var extension = Path.GetExtension(value);
                     if (extension.Equals(".xnb", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        var settings = Settings.GetSettings();
-                        var relativePath = Path.GetRelativePath(settings.ContentPath, value);
+                        var settings = ProjectSettings.GetSettings();
+                        var relativePath = Path.GetRelativePath(settings.ContentBinPath, value);
                         var fileName = Path.GetFileNameWithoutExtension(value);
                         var parts = relativePath.Split(Path.DirectorySeparatorChar);
                         parts[^1] = fileName;
@@ -583,7 +583,7 @@ namespace Editor.ViewModels
             {
                 return;
             }
-            var settings = Settings.GetSettings();
+            var settings = ProjectSettings.GetSettings();
             var allScripts = new List<ScriptReference>();
             allScripts.AddRange(_editorViewModel.SelectedParameters.ControlScripts);
             allScripts.AddRange(_editorViewModel.SelectedParameters.BuiltInScripts);
@@ -600,7 +600,7 @@ namespace Editor.ViewModels
                     {
                         continue;
                     }
-                    if (settings.BaseScriptReference.DllPath.EndsWith(reference.ScriptReference.DllPath))
+                    if (settings.GameDllPath.EndsWith(reference.ScriptReference.DllPath))
                     {
                         _editorViewModel.SelectedParameters.BuiltInScripts.Add(reference.ScriptReference);
                     }
@@ -699,12 +699,12 @@ namespace Editor.ViewModels
 
         private static IEnumerable<ScriptValueParameterModel> GetScriptParameters(GuiControlParameters parameters)
         {
-            var settings = Settings.GetSettings();
+            var settings = ProjectSettings.GetSettings();
 
             if (!File.Exists(settings.OutputPath)) yield break;
-            var baseScriptReferenceName = Path.GetFileName(settings.BaseScriptReference.DllPath);
-            var baseScriptAssembly = Assembly.LoadFrom(settings.BaseScriptReference.DllPath);
-            baseScriptAssembly.GetReferencedAssembliesAtPath(settings.BaseScriptReference.DllPath);
+            var baseScriptReferenceName = Path.GetFileName(settings.GameDllPath);
+            var baseScriptAssembly = Assembly.LoadFrom(settings.GameDllPath);
+            baseScriptAssembly.GetReferencedAssembliesAtPath(settings.GameDllPath);
             var assembly = Assembly.LoadFrom(settings.OutputPath);
             assembly.GetReferencedAssembliesAtPath(settings.OutputPath);
 

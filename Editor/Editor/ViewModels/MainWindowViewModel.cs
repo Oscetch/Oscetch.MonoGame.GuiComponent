@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -37,7 +36,6 @@ namespace Editor.ViewModels
 
             CreateScriptCommand = new CommandHandler(OpenScriptControl);
             EditScriptCommand = new CommandHandler(OnEditScript);
-            ChangeBaseScriptCommand = new CommandHandler(OnChangeBaseScript);
             SaveCommand = new CommandHandler(OnSave);
             LoadCommand = new CommandHandler(OnLoad);
             TestCommand = new CommandHandler(OnTest);
@@ -66,7 +64,7 @@ namespace Editor.ViewModels
                     ChildControls = parameters,
                     IsVisible = true,
                     IsEnabled = true,
-                    SpriteFont = Settings.GetSettings().FontPath
+                    SpriteFont = ProjectSettings.GetSettings().FontPath
                 };
                 EditorViewModel.ResetWithParameters(newBase);
             }
@@ -78,7 +76,7 @@ namespace Editor.ViewModels
 
         private void OnTest()
         {
-            var settings = Settings.GetSettings();
+            var settings = ProjectSettings.GetSettings();
             if (settings.TestJsonPath == null)
             {
                 MessageBox.Show("You must select the json output path");
@@ -139,7 +137,7 @@ namespace Editor.ViewModels
 
         private void OnEditScript()
         {
-            var settings = Settings.GetSettings();
+            var settings = ProjectSettings.GetSettings();
             var openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = Path.GetFullPath(settings.ScriptsDir),
@@ -154,27 +152,6 @@ namespace Editor.ViewModels
             scriptWindow.ShowDialog();
         }
 
-        private void OnChangeBaseScript()
-        {
-            var openFileDialog = new OpenFileDialog
-            { 
-                Filter = "Reference script(*.dll,*.exe)|*.dll;*.exe",
-                Multiselect = false,
-            };
-            if (!(openFileDialog.ShowDialog() ?? false))
-            {
-                return;
-            }
-            var scriptReferenceWindow = new ReferenceScriptTypeDialog(openFileDialog.FileName);
-            if (scriptReferenceWindow.ShowDialog() == true)
-            {
-                var settings = Settings.GetSettings().BaseScriptReference = scriptReferenceWindow.ScriptReferenceCheckedModels
-                    .FirstOrDefault(x => x.IsSelected)
-                    ?.ScriptReference;
-                Settings.Save();
-            }
-        }
-
         private void OnChangeExeTestPath()
         {
             var openFileDialog = new OpenFileDialog
@@ -186,8 +163,8 @@ namespace Editor.ViewModels
             {
                 return;
             }
-            Settings.GetSettings().TestExePath = openFileDialog.FileName;
-            Settings.Save();
+            ProjectSettings.GetSettings().TestExePath = openFileDialog.FileName;
+            ProjectSettings.Save();
         }
 
         private void OnChangeJsonTestPath()
@@ -197,8 +174,8 @@ namespace Editor.ViewModels
                 Filter = "Canvas file (*.json)|*.json",
             };
             if (saveFileDialog.ShowDialog() != true) { return; }
-            Settings.GetSettings().TestJsonPath = saveFileDialog.FileName;
-            Settings.Save();
+            ProjectSettings.GetSettings().TestJsonPath = saveFileDialog.FileName;
+            ProjectSettings.Save();
         }
 
         private void OnChangeDllPath()
@@ -208,8 +185,8 @@ namespace Editor.ViewModels
                 Filter = "Library (*.dll)|*.dll"
             };
             if (saveFileDialog.ShowDialog() != true) return;
-            Settings.GetSettings().OutputPath = saveFileDialog.FileName;
-            Settings.Save();
+            ProjectSettings.GetSettings().OutputPath = saveFileDialog.FileName;
+            ProjectSettings.Save();
         }
     }
 }

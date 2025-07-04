@@ -22,14 +22,14 @@ namespace Editor.Modals
     /// </summary>
     public partial class ModalScriptWindow : Window
     {
-        private readonly Settings _settings;
+        private readonly ProjectSettings _settings;
         private Document _document;
         private CompletionWindow _completionWindow;
 
         public ModalScriptWindow(bool isTemplatePath, string templatePath)
         {
             InitializeComponent();
-            _settings = Settings.GetSettings();
+            _settings = ProjectSettings.GetSettings();
             if (!Directory.Exists(_settings.ScriptsDir))
             {
                 Directory.CreateDirectory(_settings.ScriptsDir);
@@ -38,7 +38,7 @@ namespace Editor.Modals
             if (File.Exists(templatePath))
             {
                 var text = File.ReadAllText(templatePath);
-                codeControl.Text = isTemplatePath ? string.Format(text, _settings.BaseScriptReference.ScriptClassName) : text;
+                codeControl.Text = text;
             }
 
             _document = OscetchCompiler.CreateDocument("TestAssembly", [GetType().Assembly]);
@@ -127,7 +127,7 @@ namespace Editor.Modals
             var newScriptPath = Path.Join(_settings.ScriptsDir, $"{stringDialog.Result}.cs");
             File.WriteAllText(newScriptPath, codeControl.Text);
 
-            var referencePath = Settings.GetSettings().BaseScriptReference.DllPath;
+            var referencePath = ProjectSettings.GetSettings().GameDllPath;
             var initialAssembly = Assembly.LoadFrom(referencePath);
             var assemblyList = initialAssembly.GetReferencedAssembliesAtPath(referencePath);
             var referencedAssemblies = assemblyList.ToMetadata();

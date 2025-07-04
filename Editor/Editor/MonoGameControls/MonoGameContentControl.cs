@@ -146,13 +146,7 @@ namespace Editor.MonoGameControls
             Application.Current.MainWindow.Closing += (sender, args) => _viewModel?.OnExiting(this, EventArgs.Empty);
             Application.Current.MainWindow.ContentRendered += (sender, args) =>
             {
-                if (_isFirstLoad)
-                {
-                    _graphicsDeviceService.StartDirect3D(Application.Current.MainWindow);
-                    _viewModel?.Initialize();
-                    _viewModel?.LoadContent();
-                    _isFirstLoad = false;
-                }
+                FirstLoad();
             };
             
             _direct3DImage = new D3DImage();
@@ -163,6 +157,21 @@ namespace Editor.MonoGameControls
             CompositionTarget.Rendering += OnRender;
             _stopwatch.Start();
             _isInitialized = true;
+            if (Application.Current.MainWindow.IsLoaded)
+            {
+                FirstLoad();
+            }
+        }
+
+        private void FirstLoad()
+        {
+            if (_isFirstLoad)
+            {
+                _graphicsDeviceService.StartDirect3D(Application.Current.MainWindow);
+                _viewModel?.Initialize();
+                _viewModel?.LoadContent();
+                _isFirstLoad = false;
+            }
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
