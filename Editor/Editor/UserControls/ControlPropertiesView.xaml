@@ -40,46 +40,9 @@
                 />
             </Expander>
             <Expander Header="Text" ExpandDirection="Down" IsExpanded="False">
-                <local:TextPropertyControl 
-                Title="Text"
-                Description="The text displayed in this control"
-                PropertyValue="{Binding GuiControlText, Mode=TwoWay}"
-                x:Name="TextPropertyControl"
-                    />
-            </Expander>
-            <Expander Header="Left Align Text" ExpandDirection="Down" IsExpanded="False">
-                <local:ButtonPropertyControl 
-                Title="Left Align Text"
-                ButtonText="Left Align"
-                ButtonCommand="{Binding LeftAlignTextCommand}"
-                />
-            </Expander>
-            <Expander Header="Right Align Text" ExpandDirection="Down" IsExpanded="False">
-                <local:ButtonPropertyControl 
-                Title="Right Align Text"
-                ButtonText="Right Align"
-                ButtonCommand="{Binding RightAlignTextCommand}"
-                />
-            </Expander>
-            <Expander Header="Top Align Text" ExpandDirection="Down" IsExpanded="False">
-                <local:ButtonPropertyControl 
-                Title="Top Align Text"
-                ButtonText="Top Align"
-                ButtonCommand="{Binding TopAlignTextCommand}"
-                />
-            </Expander>
-            <Expander Header="Bottom Align Text" ExpandDirection="Down" IsExpanded="False">
-                <local:ButtonPropertyControl 
-                Title="Bottom Align Text"
-                ButtonText="Bottom Align"
-                ButtonCommand="{Binding BottomAlignTextCommand}"
-                />
-            </Expander>
-            <Expander Header="Scale Text To Bounds" ExpandDirection="Down" IsExpanded="False">
-                <local:ButtonPropertyControl 
-                Title="Scale Text To Bounds"
-                ButtonText="Scale"
-                ButtonCommand="{Binding ScaleTextToBoundsCommand}"
+                <local:EditTextControl
+                    Title="Text"
+                    Description="The text displayed in this control"
                 />
             </Expander>
             <Expander Header="Background Texture" ExpandDirection="Down" IsExpanded="False">
@@ -121,56 +84,6 @@
                 PropertyXValue="{Binding GuiControlSizeX, Mode=TwoWay}"
                 PropertyYValue="{Binding GuiControlSizeY, Mode=TwoWay}"
                 x:Name="SizePropertyControl"
-                />
-            </Expander>
-            <Expander Header="Text Position" ExpandDirection="Down" IsExpanded="False">
-                <local:Vector2PropertyControl
-                Title="Text Position"
-                Description="The position of the text related to this control"
-                PropertyXValue="{Binding GuiControlTextPositionX, Mode=TwoWay}"
-                PropertyYValue="{Binding GuiControlTextPositionY, Mode=TwoWay}"
-                x:Name="TextPositionPropertyControl"
-                />
-            </Expander>
-            <Expander Header="Text Scale" ExpandDirection="Down" IsExpanded="False">
-                <local:FloatPropertyControl 
-                Title="Text Scale"
-                Description="The scale of the text related to this control"
-                PropertyValue="{Binding GuiControlTextScale, Mode=TwoWay}"
-                x:Name="TextScalePropertyControl"
-                />
-            </Expander>
-            <Expander Header="Text Rotation" ExpandDirection="Down" IsExpanded="False">
-                <local:FloatPropertyControl 
-                Title="Text Rotation"
-                Description="The rotation of the text related to this control"
-                PropertyValue="{Binding GuiControlTextRotation, Mode=TwoWay}"
-                x:Name="TextRotationPropertyControl"
-                />
-            </Expander>
-            <Expander Header="Text Color" ExpandDirection="Down" IsExpanded="False">
-                <local:ColorPropertyControl
-                Title="Text Color"
-                Description="The color of the text related to this control"
-                PropertyValue="{Binding GuiControlTextColor, Mode=TwoWay}"
-                x:Name="TextColorPropertyControl"
-                />
-            </Expander>
-            <Expander Header="Should Center Text" ExpandDirection="Down" IsExpanded="False">
-                <local:BooleanPropertyControl 
-                Title="Should Center Text"
-                Description="Check if you want the text related to this control to be centered within it"
-                PropertyValue="{Binding GuiControlShouldCenterText, Mode=TwoWay}"
-                x:Name="CenterTextPropertyControl"
-                />
-            </Expander>
-            <Expander Header="Sprite Font" ExpandDirection="Down" IsExpanded="False">
-                <local:FilePropertyControl
-                Title="Sprite Font"
-                Description="The path to the font you want to be used for the text related to this control"
-                PropertyValue="{Binding GuiControlSpriteFont, Mode=TwoWay}"
-                FileFilter="XNB Files(*.xnb)|*.xnb"
-                x:Name="SpriteFontPropertyControl"
                 />
             </Expander>
             <Expander Header="Has Border" ExpandDirection="Down" IsExpanded="False">

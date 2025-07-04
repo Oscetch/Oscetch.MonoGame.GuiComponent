@@ -38,4 +38,20 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</None>
     </ItemGroup>
+	<ItemGroup>
+	  <None Remove="Icons\bottomAlign.png" />
+	  <None Remove="Icons\centerAlign.png" />
+	  <None Remove="Icons\leftAlign.png" />
+	  <None Remove="Icons\rightAlign.png" />
+	  <None Remove="Icons\scaleToBounds.png" />
+	  <None Remove="Icons\topAlign.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Icons\bottomAlign.png" />
+	  <Resource Include="Icons\centerAlign.png" />
+	  <Resource Include="Icons\leftAlign.png" />
+	  <Resource Include="Icons\rightAlign.png" />
+	  <Resource Include="Icons\scaleToBounds.png" />
+	  <Resource Include="Icons\topAlign.png" />
+	</ItemGroup>
 </Project>

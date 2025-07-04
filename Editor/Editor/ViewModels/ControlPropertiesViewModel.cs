@@ -155,14 +155,14 @@ namespace Editor.ViewModels
 
         public System.Windows.Media.Color CustomTextureColor
         {
-            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.FillColor ?? Color.Transparent);
+            get => (_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.FillColor ?? Color.Transparent).ToWindows();
             set
             {
                 if (_editorViewModel.SelectedParameters == null) return;
                 var parameters =
                     _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
                     ?? new CustomTextureParameters.CustomTextureParametersBuilder();
-                _editorViewModel.SelectedParameters.Background = parameters.WithFillColor(MediaColorToXnaColor(value)).Build();
+                _editorViewModel.SelectedParameters.Background = parameters.WithFillColor(value.ToXna()).Build();
                 _editorViewModel.LoadSelected();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(GuiControlBackground));
@@ -203,32 +203,17 @@ namespace Editor.ViewModels
 
         public System.Windows.Media.Color CustomTextureBorder
         {
-            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.BorderColor ?? Color.Transparent);
+            get => (_editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.BorderColor ?? Color.Transparent).ToWindows();
             set
             {
                 if (_editorViewModel.SelectedParameters == null) return;
                 var parameters =
                     _editorViewModel.SelectedParameters?.Background?.CustomTextureParameters?.ToBuilder()
                     ?? new CustomTextureParameters.CustomTextureParametersBuilder();
-                _editorViewModel.SelectedParameters.Background = parameters.WithBorderColor(MediaColorToXnaColor(value)).Build();
+                _editorViewModel.SelectedParameters.Background = parameters.WithBorderColor(value.ToXna()).Build();
                 _editorViewModel.LoadSelected();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(GuiControlBackground));
-            }
-        }
-
-        public string GuiControlText
-        {
-            get => _editorViewModel.SelectedParameters?.Text;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.Text = value;
-                OnPropertyChanged();
             }
         }
 
@@ -242,11 +227,6 @@ namespace Editor.ViewModels
             }
         }
 
-        public ICommand LeftAlignTextCommand { get; }
-        public ICommand TopAlignTextCommand { get; }
-        public ICommand RightAlignTextCommand { get; }
-        public ICommand BottomAlignTextCommand { get; }
-        public ICommand ScaleTextToBoundsCommand { get; }
         public ICommand SetCustomTextureSizeToControlSize { get; }
 
         public float GuiControlPositionX
@@ -313,113 +293,6 @@ namespace Editor.ViewModels
             }
         }
 
-        public float GuiControlTextPositionX
-        {
-            get => _editorViewModel.SelectedParameters?.TextPosition.X ?? 0f;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.TextPosition =
-                    new Vector2(value, _editorViewModel.SelectedParameters.TextPosition.Y);
-                OnPropertyChanged();
-            }
-        }
-
-        public float GuiControlTextPositionY
-        {
-            get => _editorViewModel.SelectedParameters?.TextPosition.Y ?? 0f;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.TextPosition =
-                    new Vector2(_editorViewModel.SelectedParameters.TextPosition.X, value);
-                OnPropertyChanged();
-            }
-        }
-
-        public float GuiControlTextScale
-        {
-            get => _editorViewModel.SelectedParameters?.TextScale ?? 1f;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.TextScale = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public float GuiControlTextRotation
-        {
-            get => _editorViewModel.SelectedParameters?.TextRotation ?? 0f;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.TextRotation = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public System.Windows.Media.Color GuiControlTextColor
-        {
-            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.TextColor ?? Color.White);
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.TextColor = MediaColorToXnaColor(value);
-                OnPropertyChanged();
-            }
-        }
-
-        public bool GuiControlShouldCenterText
-        {
-            get => _editorViewModel.SelectedParameters?.CenterText ?? false;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.CenterText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string GuiControlSpriteFont
-        {
-            get => _editorViewModel.SelectedParameters?.SpriteFont ?? string.Empty;
-            set
-            {
-                if (_editorViewModel.SelectedParameters == null)
-                {
-                    return;
-                }
-
-                _editorViewModel.SelectedParameters.SpriteFont = Path.GetFileNameWithoutExtension(value);
-                OnPropertyChanged();
-            }
-        }
-
         public bool GuiControlHasBorder
         {
             get => _editorViewModel.SelectedParameters?.HasBorder ?? false;
@@ -437,7 +310,7 @@ namespace Editor.ViewModels
 
         public System.Windows.Media.Color GuiControlBorderColor
         {
-            get => XnaColorToMediaColor(_editorViewModel.SelectedParameters?.BorderColor ?? Color.White);
+            get => (_editorViewModel.SelectedParameters?.BorderColor ?? Color.White).ToWindows();
             set
             {
                 if (_editorViewModel.SelectedParameters == null)
@@ -445,7 +318,7 @@ namespace Editor.ViewModels
                     return;
                 }
 
-                _editorViewModel.SelectedParameters.BorderColor = MediaColorToXnaColor(value);
+                _editorViewModel.SelectedParameters.BorderColor = value.ToXna();
                 OnPropertyChanged();
             }
         }
@@ -493,11 +366,6 @@ namespace Editor.ViewModels
             _editorViewModel.SelectedControlSizeUpdated += EditorViewModel_SelectedControlSizeUpdated;
 
             EditScriptsCommand = new CommandHandler(OnEditScriptsClicked);
-            LeftAlignTextCommand = new CommandHandler(OnLeftAlignTextClicked);
-            RightAlignTextCommand = new CommandHandler(OnRightAlignTextClicked);
-            TopAlignTextCommand = new CommandHandler(OnTopAlignTextClicked);
-            BottomAlignTextCommand = new CommandHandler(OnBottomAlignTextClicked);
-            ScaleTextToBoundsCommand = new CommandHandler(OnScaleTextToBounds);
             SetCustomTextureSizeToControlSize = new CommandHandler(OnSetCustomTextureSizeToControlSize);
         }
 
@@ -507,74 +375,6 @@ namespace Editor.ViewModels
             if (p == null) return;
             CustomTextureWidth = (int)p.Size.X;
             CustomTextureHeight = (int)p.Size.Y;
-        }
-
-        private void OnScaleTextToBounds() 
-        {
-            var p = _editorViewModel.SelectedParameters;
-            if (p == null || string.IsNullOrEmpty(p.Text))
-            {
-                return;
-            }
-            var textSize = _editorViewModel.SelectedTextSizeWithoutScale();
-            var widthFraction = p.Size.X / textSize.X;
-            var heightFraction = p.Size.Y / textSize.Y;
-
-            var smallestFraction = Math.Min(widthFraction, heightFraction);
-            p.TextScale = smallestFraction;
-            OnPropertyChanged(nameof(GuiControlTextScale));
-        }
-
-        private void OnBottomAlignTextClicked()
-        {
-            var p = _editorViewModel.SelectedParameters;
-            if (p == null || string.IsNullOrEmpty(p.Text))
-            {
-                return;
-            }
-            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
-
-            p.TextPosition = new Vector2(p.TextPosition.X, p.Position.Y + p.Size.Y - (textSize.Y / 2));
-            OnPropertyChanged(nameof(GuiControlTextPositionY));
-        }
-
-        private void OnTopAlignTextClicked()
-        {
-            var p = _editorViewModel.SelectedParameters;
-            if (p == null || string.IsNullOrEmpty(p.Text))
-            {
-                return;
-            }
-            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
-
-            p.TextPosition = new Vector2(p.TextPosition.X, p.Position.Y + (textSize.Y / 2));
-            OnPropertyChanged(nameof(GuiControlTextPositionY));
-        }
-
-        private void OnRightAlignTextClicked()
-        {
-            var p = _editorViewModel.SelectedParameters;
-            if (p == null || string.IsNullOrEmpty(p.Text))
-            {
-                return;
-            }
-            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
-
-            p.TextPosition = new Vector2(p.Position.X + p.Size.X - (textSize.X / 2), p.TextPosition.Y);
-            OnPropertyChanged(nameof(GuiControlTextPositionX));
-        }
-
-        private void OnLeftAlignTextClicked() 
-        {
-            var p = _editorViewModel.SelectedParameters;
-            if (p == null || string.IsNullOrEmpty(p.Text))
-            {
-                return;
-            }
-            var textSize = _editorViewModel.SelectedTextSizeWithoutScale() * p.TextScale;
-
-            p.TextPosition = new Vector2(p.Position.X + (textSize.X / 2), p.TextPosition.Y);
-            OnPropertyChanged(nameof(GuiControlTextPositionX));
         }
 
         private void OnEditScriptsClicked()
@@ -613,40 +413,16 @@ namespace Editor.ViewModels
             }
         }
 
-        private static System.Windows.Media.Color XnaColorToMediaColor(Color color)
-        {
-            return new System.Windows.Media.Color
-            {
-                R = color.R,
-                G = color.G,
-                B = color.B,
-                A = color.A
-            };
-        }
-
-        private static Color MediaColorToXnaColor(System.Windows.Media.Color color)
-        {
-            return new Color(color.R, color.G, color.B, color.A);
-        }
-
         private void SyncEditor()
         {
             OnPropertyChanged(nameof(GuiControlName));
             OnPropertyChanged(nameof(GuiControlIsEnabled));
             OnPropertyChanged(nameof(GuiControlIsVisible));
             OnPropertyChanged(nameof(GuiControlBackground));
-            OnPropertyChanged(nameof(GuiControlText));
             OnPropertyChanged(nameof(GuiControlPositionX));
             OnPropertyChanged(nameof(GuiControlSizeX));
-            OnPropertyChanged(nameof(GuiControlTextPositionX));
             OnPropertyChanged(nameof(GuiControlPositionY));
             OnPropertyChanged(nameof(GuiControlSizeY));
-            OnPropertyChanged(nameof(GuiControlTextPositionY));
-            OnPropertyChanged(nameof(GuiControlTextScale));
-            OnPropertyChanged(nameof(GuiControlTextRotation));
-            OnPropertyChanged(nameof(GuiControlTextColor));
-            OnPropertyChanged(nameof(GuiControlShouldCenterText));
-            OnPropertyChanged(nameof(GuiControlSpriteFont));
             OnPropertyChanged(nameof(GuiControlHasBorder));
             OnPropertyChanged(nameof(GuiControlBorderColor));
             OnPropertyChanged(nameof(GuiControlIsModal));
@@ -687,9 +463,7 @@ namespace Editor.ViewModels
         private void EditorViewModel_SelectedControlPositionUpdated(object sender, EventArgs e)
         {
             OnPropertyChanged(nameof(GuiControlPositionX));
-            OnPropertyChanged(nameof(GuiControlTextPositionX));
             OnPropertyChanged(nameof(GuiControlPositionY));
-            OnPropertyChanged(nameof(GuiControlTextPositionY));
         }
 
         private void EditorViewModel_SelectedControlChanged(object sender, EventArgs e)

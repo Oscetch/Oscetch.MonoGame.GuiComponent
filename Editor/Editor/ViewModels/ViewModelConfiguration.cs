@@ -9,8 +9,8 @@ namespace Editor.ViewModels
             Bind<MainWindowViewModel>().ToSelf().InSingletonScope();
             Bind<EditorViewModel>().ToSelf().InSingletonScope();
             Bind<TopLeftViewModel>().ToSelf().InSingletonScope();
-            Bind<LeftPanelViewModel>().ToSelf().InSingletonScope();
             Bind<ControlPropertiesViewModel>().ToSelf().InSingletonScope();
+            Bind<EditTextViewModel>().ToSelf().InSingletonScope();
         }
     }
 }
