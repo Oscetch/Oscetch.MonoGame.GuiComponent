@@ -14,9 +14,7 @@ namespace Editor.ViewModels
 {
     public class MainWindowViewModel : ViewModel
     {
-        public EditorViewModel EditorViewModel { get; }
-        public LeftPanelViewModel LeftPanelViewModel { get; }
-        public ControlTreeViewModel ControlTreeViewModel { get; }
+        private readonly EditorViewModel _editorViewModel;
 
         public ICommand CreateScriptCommand { get; }
         public ICommand EditScriptCommand { get; }
@@ -28,11 +26,9 @@ namespace Editor.ViewModels
         public ICommand EditTestJsonPathCommand { get; }
         public ICommand EditDllOutputPath { get; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(EditorViewModel editorViewModel)
         {
-            EditorViewModel = new EditorViewModel();
-            LeftPanelViewModel = new LeftPanelViewModel(EditorViewModel);
-            ControlTreeViewModel = new ControlTreeViewModel(EditorViewModel);
+            _editorViewModel = editorViewModel;
 
             CreateScriptCommand = new CommandHandler(OpenScriptControl);
             EditScriptCommand = new CommandHandler(OnEditScript);
@@ -66,9 +62,9 @@ namespace Editor.ViewModels
                     IsEnabled = true,
                     SpriteFont = ProjectSettings.GetSettings().FontPath
                 };
-                EditorViewModel.ResetWithParameters(newBase);
+                _editorViewModel.ResetWithParameters(newBase);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Could not load file");
             }
@@ -88,7 +84,7 @@ namespace Editor.ViewModels
                 return;
             }
 
-            var serialized = JsonConvert.SerializeObject(EditorViewModel.Parameters.ChildControls);
+            var serialized = JsonConvert.SerializeObject(_editorViewModel.Parameters.ChildControls);
             File.WriteAllText(settings.TestJsonPath, serialized);
 
             var binTargetPath = Path.Join(Path.GetDirectoryName(settings.TestExePath), Path.GetFileName(settings.OutputPath));
@@ -125,13 +121,13 @@ namespace Editor.ViewModels
                 return;
             }
 
-            var serialized = JsonConvert.SerializeObject(EditorViewModel.Parameters.ChildControls);
+            var serialized = JsonConvert.SerializeObject(_editorViewModel.Parameters.ChildControls);
             File.WriteAllText(saveFileDialog.FileName, serialized);
         }
 
         private void OpenScriptControl()
         {
-            var scriptWindow = new ModalScriptWindow(true, "ScriptTemplates/ScriptTemplate.txt");
+            var scriptWindow = new ModalScriptWindow("ScriptTemplates/ScriptTemplate.txt");
             scriptWindow.ShowDialog();
         }
 
@@ -148,7 +144,7 @@ namespace Editor.ViewModels
             {
                 return;
             }
-            var scriptWindow = new ModalScriptWindow(false, openFileDialog.FileName);
+            var scriptWindow = new ModalScriptWindow(openFileDialog.FileName);
             scriptWindow.ShowDialog();
         }
 

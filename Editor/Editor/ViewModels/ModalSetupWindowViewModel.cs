@@ -66,9 +66,9 @@ namespace Editor.ViewModels
             OpenFromPath(openFileDialog.FileName, window);
         }
 
-        private void OpenFromPath(string path, Window window)
+        private static void OpenFromPath(string path, Window window)
         {
-            var settings = ProjectSettings.GetSettings(path);
+            ProjectSettings.GetSettings(path);
             EditorSettings.Load().LoadProject(path);
             window.DialogResult = true;
         }
@@ -125,7 +125,7 @@ namespace Editor.ViewModels
             window.DialogResult = true;
         }
 
-        private string FindDirInPath(string path, string directoryName, List<string> except = null)
+        private static string FindDirInPath(string path, string directoryName, List<string> except = null)
         {
             foreach (var dir in Directory.GetDirectories(path))
             {

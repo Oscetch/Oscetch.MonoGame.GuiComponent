@@ -13,23 +13,5 @@ namespace Editor.UserControls
         {
             InitializeComponent();
         }
-
-        public TopLeftViewModel TopLeftViewModel
-        {
-            get => (TopLeftViewModel)GetValue(TopLeftViewModelProperty);
-            set => SetValue(TopLeftViewModelProperty, value);
-        }
-
-        public static readonly DependencyProperty TopLeftViewModelProperty = DependencyProperty.Register(nameof(TopLeftViewModel),
-            typeof(TopLeftViewModel), typeof(TopLeftPanelView), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is not TopLeftPanelView view || e.NewValue is not TopLeftViewModel viewModel)
-            {
-                return;
-            }
-
-            view.DataContext = viewModel;
-        }
     }
 }

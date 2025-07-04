@@ -1,10 +1,8 @@
 ﻿using Editor.Modals;
 using Editor.MonoGameControls;
-using Editor.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -39,24 +37,6 @@ namespace Editor.UserControls
                 RootDock.Children.Remove(existing);
             }
             RootDock.Children.Add(new MonoGameContentControl());
-        }
-
-        public EditorViewModel EditorViewModel 
-        { 
-            get => (EditorViewModel)GetValue(EditorViewModelProperty); 
-            set => SetValue(EditorViewModelProperty, value); 
-        }
-
-        public static readonly DependencyProperty EditorViewModelProperty = DependencyProperty.Register(nameof(EditorViewModel),
-            typeof(EditorViewModel), typeof(EditorView), new PropertyMetadata(OnViewModelChanged));
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if(d is not EditorView view || e.NewValue is not EditorViewModel viewModel)
-            {
-                return;
-            }
-
-            view.DataContext = viewModel;
         }
     }
 }

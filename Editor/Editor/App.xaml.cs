@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using Editor.Services;
+using Editor.ViewModels;
+using System.Windows;
 
 namespace Editor
 {
@@ -6,6 +8,8 @@ namespace Editor
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            NinjectKernel.Init(new ViewModelConfiguration());
+
             base.OnStartup(e);
         }
     }

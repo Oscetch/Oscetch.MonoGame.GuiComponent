@@ -26,7 +26,7 @@ namespace Editor.Modals
         private Document _document;
         private CompletionWindow _completionWindow;
 
-        public ModalScriptWindow(bool isTemplatePath, string templatePath)
+        public ModalScriptWindow(string templatePath)
         {
             InitializeComponent();
             _settings = ProjectSettings.GetSettings();
@@ -132,7 +132,7 @@ namespace Editor.Modals
             var assemblyList = initialAssembly.GetReferencedAssembliesAtPath(referencePath);
             var referencedAssemblies = assemblyList.ToMetadata();
             var result = OscetchCompiler.Compile(_settings.AssemblyName, syntaxTrees, referencedAssemblies, 
-                out var dllPath, out var diagnostics);
+                out var dllPath, out _);
             if (!result)
             {
                 MessageBox.Show("Error compiling");
@@ -152,7 +152,7 @@ namespace Editor.Modals
             var scintillaSyntaxTree = CSharpSyntaxTree.ParseText(codeControl.Text);
             syntaxTreeList.Add(scintillaSyntaxTree);
 
-            newClassNames = scintillaSyntaxTree.GetClassNames().ToList();
+            newClassNames = [.. scintillaSyntaxTree.GetClassNames()];
 
             foreach(var scriptFile in Directory.GetFiles(_settings.ScriptsDir))
             {
