@@ -85,7 +85,7 @@ namespace Editor.ViewModels
 
         public GuiControlParameters SelectedParameters => SelectedControl?.Parameters;
 
-        public IReadOnlyList<GuiControl<IGameToGuiService>> Children => _customControl.Children;
+        public IReadOnlyList<GuiControl<IGameToGuiService>> Children => _customControl?.Children;
 
         public ControlBuilderConfiguration Configuration { get; private set; } = new ControlBuilderConfiguration();
 
@@ -98,9 +98,9 @@ namespace Editor.ViewModels
             _selectedControl.SpriteFont = Content.Load<SpriteFont>(SelectedParameters.SpriteFont);
         }
 
-        private void SetDrawableArea()
+        private void SetDrawableArea(int width = 800, int height = 640)
         {
-            _drawableBoundsRect = new Rectangle(0, 0, 800, 640);
+            _drawableBoundsRect = new Rectangle(0, 0, width, height);
             Resolution = _drawableBoundsRect.Size.ToVector2();
             
             _cameraHandler = new CameraHandler(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height)
@@ -108,6 +108,13 @@ namespace Editor.ViewModels
                 CameraPosition = _cameraHandler.CameraPosition,
                 Scale = _cameraHandler.Scale
             };
+        }
+
+        public void UpdateResolution(Point res)
+        {
+            SetDrawableArea(res.X, res.Y);
+            if (_customControl == null) return;
+            ResetWithParameters(Parameters);
         }
 
         private void UpdateIndicator()
@@ -146,6 +153,7 @@ namespace Editor.ViewModels
                     continue;
                 }
                 LoadSelected();
+                SelectedControlChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -824,10 +832,12 @@ namespace Editor.ViewModels
 
             _cameraHandler = new CameraHandler(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            SetDrawableArea();
+            var settings = ProjectSettings.GetSettings();
+
+            SetDrawableArea(settings.Resolution.X, settings.Resolution.Y);
 
             SetConfiguration(UiBuilderConfigurationHelper.GetConfiguration("default"));
-            var fontPath = ProjectSettings.GetSettings().FontPath;
+            var fontPath = settings.FontPath;
             _font = Content.Load<SpriteFont>(fontPath);
 
             typeof(GuiControl<IGameToGuiService>)
@@ -841,6 +851,7 @@ namespace Editor.ViewModels
                 IsEnabled = true,
                 SpriteFont = fontPath
             }, null);
+            OnReset?.Invoke(this, EventArgs.Empty);
         }
 
         public override void Draw(GameTime gameTime)

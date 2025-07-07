@@ -32,7 +32,7 @@ namespace Editor.MonoGameControls
 {
     public sealed class MonoGameContentControl : ContentControl, IDisposable
     {
-        private static readonly MonoGameGraphicsDeviceService _graphicsDeviceService = new();
+        private readonly MonoGameGraphicsDeviceService _graphicsDeviceService = new();
         private int _instanceCount;
         private IMonoGameViewModel _viewModel;
         private readonly GameTime _gameTime = new();
@@ -83,7 +83,7 @@ namespace Editor.MonoGameControls
             e.Handled = true;
         }
 
-        public static GraphicsDevice GraphicsDevice => _graphicsDeviceService?.GraphicsDevice;
+        public GraphicsDevice GraphicsDevice => _graphicsDeviceService?.GraphicsDevice;
 
         public bool IsDisposed { get; private set; }
 

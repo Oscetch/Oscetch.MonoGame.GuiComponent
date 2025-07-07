@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace Editor
@@ -53,5 +54,6 @@ namespace Editor
         public string MgcbPath { get; set; } = null;
         public string ContentPath { get; set; } = null;
         public string GameDllPath { get; set; } = null;
+        public Point Resolution { get; set; } = new Point(1280, 720);
     }
 }

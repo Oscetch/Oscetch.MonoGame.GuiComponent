@@ -32,8 +32,9 @@ namespace Editor.UserControls
 
         private void EditorView_ProjectChanged(object sender, EventArgs e)
         {
-            foreach (var existing in RootDock.Children.OfType<MonoGameContentControl>())
+            foreach (var existing in RootDock.Children.OfType<MonoGameContentControl>().ToList())
             {
+                existing.Dispose();
                 RootDock.Children.Remove(existing);
             }
             RootDock.Children.Add(new MonoGameContentControl());

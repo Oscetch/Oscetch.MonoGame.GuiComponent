@@ -12,7 +12,6 @@ using Oscetch.MonoGame.Math.Objects;
 using Oscetch.ScriptComponent;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Oscetch.MonoGame.GuiComponent

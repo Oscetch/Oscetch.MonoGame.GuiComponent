@@ -11,6 +11,7 @@ namespace Editor.ViewModels
             Bind<TopLeftViewModel>().ToSelf().InSingletonScope();
             Bind<ControlPropertiesViewModel>().ToSelf().InSingletonScope();
             Bind<EditTextViewModel>().ToSelf().InSingletonScope();
+            Bind<ControlTreeViewModel>().ToSelf().InSingletonScope();
         }
     }
 }

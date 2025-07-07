@@ -1,6 +1,4 @@
-﻿using Editor.ViewModels;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Editor.UserControls
 {
@@ -12,24 +10,6 @@ namespace Editor.UserControls
         public ControlTreeView()
         {
             InitializeComponent();
-        }
-
-        public ControlTreeViewModel ControlTreeViewModel 
-        {
-            get => (ControlTreeViewModel)GetValue(ControlTreeViewModelProperty);
-            set => SetValue(ControlTreeViewModelProperty, value);
-        }
-
-        public static readonly DependencyProperty ControlTreeViewModelProperty = DependencyProperty.Register(nameof(ControlTreeViewModel), 
-            typeof(ControlTreeViewModel), typeof(ControlTreeView), new PropertyMetadata(OnViewModelChanged));
-
-        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is not ControlTreeView view || e.NewValue is not ControlTreeViewModel viewModel) 
-            {
-                return;
-            } 
-            view.DataContext = viewModel;
         }
     }
 }

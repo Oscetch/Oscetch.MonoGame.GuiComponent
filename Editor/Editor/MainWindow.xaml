@@ -16,7 +16,11 @@
     Height="480">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
+            <MenuItem Header="_Project">
+                <MenuItem Header="_Setup" Command="{Binding Setup}" />
+                <MenuItem Header="_Change" Command="{Binding ChangeSettings}" />
+            </MenuItem>
+            <MenuItem Header="_Canvas">
                 <MenuItem Header="_Save" Command="{Binding SaveCommand}" />
                 <MenuItem Header="_Load" Command="{Binding LoadCommand}" />
                 <MenuItem Header="_Test Canvas" Command="{Binding TestCommand}" />

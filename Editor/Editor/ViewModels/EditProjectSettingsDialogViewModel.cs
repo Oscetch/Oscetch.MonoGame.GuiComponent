@@ -2,6 +2,7 @@
 using Editor.Handlers;
 using Editor.MgcbStuff;
 using Microsoft.Win32;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
+using Point = Microsoft.Xna.Framework.Point;
 
 namespace Editor.ViewModels
 {
@@ -25,6 +27,8 @@ namespace Editor.ViewModels
         private string _baseDllPath;
 
         private bool _addDefaultFont;
+
+        private Point _screenSize = new (1280, 720);
 
         public string ProjectPath
         {
@@ -119,6 +123,26 @@ namespace Editor.ViewModels
             }
         }
 
+        public int ScreenWidth
+        {
+            get => _screenSize.X;
+            set
+            {
+                _screenSize.X = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ScreenHeight
+        {
+            get => _screenSize.Y;
+            set
+            {
+                _screenSize.Y = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool DontAddDefaultFont => !_addDefaultFont;
 
         public ICommand SelectProjectPath { get; }
@@ -131,7 +155,7 @@ namespace Editor.ViewModels
         public ICommand SelectDllPath { get; }
         public ICommand OnOk { get; }
 
-        public EditProjectSettingsDialogViewModel(string projectPath, string contentPath, string contentBinPath, string mgcbPath, string defaultFont, string baseDllPath)
+        public EditProjectSettingsDialogViewModel(string projectPath, string contentPath, string contentBinPath, string mgcbPath, string defaultFont, string baseDllPath, int screenWidth = 1280, int screenHeight = 720)
         {
             ProjectPath = projectPath;
             ContentPath = contentPath;
@@ -152,6 +176,9 @@ namespace Editor.ViewModels
             SetOutputDllPath = new CommandHandler(() => SetFilePath("Set scripts output dll path", "Dynamic link library(*.dll)|*.dll", p => ScriptOutputDllPath = p));
             SelectScriptsDirectory = new CommandHandler(() => SelectDirectory("Select scripts directory", p => ScriptsDirectory = p));
             SelectDllPath = new CommandHandler(() => SelectFilePath("Game dll path", "Dynamic link library(*.dll)|*.dll", p => BaseDllPath = p));
+
+            ScreenWidth = screenWidth;
+            ScreenHeight = screenHeight;
 
             OnOk = new CommandHandler<Window>(OnOKClicked);
         }
@@ -188,6 +215,8 @@ namespace Editor.ViewModels
             settings.MgcbPath = MgcbPath;
             settings.ContentPath = ContentPath;
             settings.GameDllPath = BaseDllPath;
+
+            settings.Resolution = _screenSize;
 
             ProjectSettings.Save();
             EditorSettings.Load().LoadProject(settings.SettingsPath);

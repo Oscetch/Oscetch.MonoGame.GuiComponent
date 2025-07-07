@@ -9,5 +9,6 @@ namespace Editor.ViewModels
         public static TopLeftViewModel TopLeftViewModel => NinjectKernel.Get<TopLeftViewModel>();
         public static ControlPropertiesViewModel ControlPropertiesViewModel => NinjectKernel.Get<ControlPropertiesViewModel>();
         public static EditTextViewModel EditTextViewModel => NinjectKernel.Get<EditTextViewModel>();
+        public static ControlTreeViewModel ControlTreeViewModel => NinjectKernel.Get<ControlTreeViewModel>();
     }
 }

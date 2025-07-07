@@ -18,6 +18,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -63,6 +65,12 @@
         <TextBox Margin="5" Grid.Row="8" Grid.Column="1" IsReadOnly="True" Text="{Binding BaseDllPath}" />
         <Button Margin="5" Grid.Row="8" Grid.Column="2" Command="{Binding SelectDllPath}" Content="..." />
 
-        <Button Margin="5" Grid.Row="10" Grid.ColumnSpan="4" Content="OK" Command="{Binding OnOk}" CommandParameter="{Binding ElementName=Window}" />
+        <TextBlock Margin="5" Grid.Row="9" Text="Screen Width" />
+        <TextBox Margin="5" Grid.Row="9" Grid.Column="1" Text="{Binding ScreenWidth}" />
+
+        <TextBlock Margin="5" Grid.Row="10" Text="Screen Height" />
+        <TextBox Margin="5" Grid.Row="10" Grid.Column="1" Text="{Binding ScreenHeight}" />
+
+        <Button Margin="5" Grid.Row="12" Grid.ColumnSpan="4" Content="OK" Command="{Binding OnOk}" CommandParameter="{Binding ElementName=Window}" />
     </Grid>
 </Window>

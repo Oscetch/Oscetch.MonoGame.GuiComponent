@@ -16,6 +16,8 @@ namespace Editor.ViewModels
     {
         private readonly EditorViewModel _editorViewModel;
 
+        public ICommand Setup { get; }
+        public ICommand ChangeSettings { get; }
         public ICommand CreateScriptCommand { get; }
         public ICommand EditScriptCommand { get; }
         public ICommand ChangeBaseScriptCommand { get; }
@@ -38,6 +40,31 @@ namespace Editor.ViewModels
             EditTestExePathCommand = new CommandHandler(OnChangeExeTestPath);
             EditTestJsonPathCommand = new CommandHandler(OnChangeJsonTestPath);
             EditDllOutputPath = new CommandHandler(OnChangeDllPath);
+            Setup = new CommandHandler(OpenSetup);
+            ChangeSettings = new CommandHandler(ChangeProjectSettings);
+        }
+
+        private void ChangeProjectSettings()
+        {
+            var projectSettings = ProjectSettings.GetSettings();
+            var editSettingsViewModel = new EditProjectSettingsDialogViewModel(
+                Path.GetDirectoryName(projectSettings.SettingsPath),
+                projectSettings.ContentPath,
+                projectSettings.ContentBinPath,
+                projectSettings.MgcbPath,
+                Path.ChangeExtension(Path.Join(projectSettings.ContentPath, projectSettings.FontPath), "spritefont"),
+                projectSettings.GameDllPath,
+                projectSettings.Resolution.X,
+                projectSettings.Resolution.Y
+            );
+            var editSettings = new EditProjectSettingsDialog("Edit settings", editSettingsViewModel);
+            editSettings.ShowDialog();
+        }
+
+        private void OpenSetup()
+        {
+            var setupWindow = new ModalSetupWindow();
+            setupWindow.ShowDialog();
         }
 
         private void OnLoad()
