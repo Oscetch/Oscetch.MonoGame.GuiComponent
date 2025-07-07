@@ -23,6 +23,7 @@ namespace Editor.MonoGameControls
         void OnMouseWheel(IInputElement reference, MouseWheelEventArgs e);
         void OnMouseDown(IInputElement reference, MouseButtonEventArgs e);
         void OnMouseMove(IInputElement reference, MouseEventArgs e);
+        void OnFileDrop(string[] files);
 
         void SizeChanged(object sender, SizeChangedEventArgs args);
     }
@@ -73,6 +74,10 @@ namespace Editor.MonoGameControls
         }
 
         public virtual void OnMouseMove(IInputElement reference, MouseEventArgs e)
+        {
+        }
+
+        public virtual void OnFileDrop(string[] files)
         {
         }
     }

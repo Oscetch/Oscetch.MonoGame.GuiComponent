@@ -9,7 +9,7 @@ namespace Editor.MgcbStuff
         public static void Rebuild(string customContentPath = null, string customMgcbPath = null)
         {
             var contentPath = Path.GetFullPath(customContentPath ?? ProjectSettings.GetSettings().ContentBinPath);
-            var mgcbPath = Path.GetFullPath(customMgcbPath) ?? ProjectSettings.GetSettings().MgcbPath;
+            var mgcbPath = Path.GetFullPath(customMgcbPath ?? ProjectSettings.GetSettings().MgcbPath);
 
             RunCommand(contentPath, mgcbPath, "/@:\"Content.mgcb\" /rebuild");
         }
@@ -42,15 +42,15 @@ namespace Editor.MgcbStuff
             proc.WaitForExit();
         }
 
-        public static void AddTexture(string texturePath, string customContentPath = null, string customMgcbPath = null) =>
+        public static string AddTexture(string texturePath, string customContentPath = null, string customMgcbPath = null) =>
             AddFileToContent(texturePath, TEXTURE2D, customContentPath, customMgcbPath);
 
-        public static void AddSpriteFont(string spriteFontPath, string customContentPath = null, string customMgcbPath = null) =>
+        public static string AddSpriteFont(string spriteFontPath, string customContentPath = null, string customMgcbPath = null) =>
             AddFileToContent(spriteFontPath, FONT, customContentPath, customMgcbPath);
 
-        private static void AddFileToContent(string newFilePath, string template, string customContentPath = null, string customMgcbPath = null)
+        private static string AddFileToContent(string newFilePath, string template, string customContentPath = null, string customMgcbPath = null)
         {
-            var contentPath = Path.GetFullPath(customContentPath ?? ProjectSettings.GetSettings().ContentBinPath);
+            var contentPath = Path.GetFullPath(customContentPath ?? ProjectSettings.GetSettings().ContentPath);
             var fullTexturePath = Path.GetFullPath(newFilePath);
             var fileName = Path.GetFileName(fullTexturePath);
             var path = Path.Join(contentPath, "Content.mgcb");
@@ -71,6 +71,8 @@ namespace Editor.MgcbStuff
             File.AppendAllLines(path, string.Format(template, contentName).Split(separator: ["\r\n", "\n", "\r"], System.StringSplitOptions.None));
 
             Rebuild(contentPath, customMgcbPath);
+
+            return Path.ChangeExtension(contentName, null);
         }
 
         private const string TEXTURE2D = @"

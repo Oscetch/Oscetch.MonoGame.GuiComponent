@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Windows;
 using Point = Microsoft.Xna.Framework.Point;
 using Oscetch.MonoGame.GuiComponent.Interfaces;
+using Editor.MgcbStuff;
 
 namespace Editor.ViewModels
 {
@@ -94,6 +95,7 @@ namespace Editor.ViewModels
         {
             if (_selectedControl == null) return;
             _selectedControl.Background = SelectedParameters.Background?.Load(Content, GraphicsDevice);
+            _selectedControl.SpriteFont = Content.Load<SpriteFont>(SelectedParameters.SpriteFont);
         }
 
         private void SetDrawableArea()
@@ -120,6 +122,30 @@ namespace Editor.ViewModels
             foreach (var child in control.Children)
             {
                 UpdateControlPosition(child, positionDiff);
+            }
+        }
+
+        public override void OnFileDrop(string[] files)
+        {
+            if (_selectedControl == null) return;
+
+            foreach (var file in files) 
+            {
+                if (file.EndsWith(".png"))
+                {
+                    var path = Mgcb.AddTexture(file);
+                    _selectedControl.Parameters.Background = path;
+                }
+                else if (file.EndsWith(".spritefont"))
+                {
+                    var path = Mgcb.AddSpriteFont(file);
+                    _selectedControl.Parameters.SpriteFont = path;
+                }
+                else
+                {
+                    continue;
+                }
+                LoadSelected();
             }
         }
 

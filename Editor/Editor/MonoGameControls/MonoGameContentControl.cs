@@ -49,6 +49,8 @@ namespace Editor.MonoGameControls
                 return;
 
             _instanceCount++;
+            AllowDrop = true;
+            Drop += MonoGameContentControl_Drop;
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
             DataContextChanged += (sender, args) =>
@@ -64,6 +66,16 @@ namespace Editor.MonoGameControls
             Mouse.AddMouseMoveHandler(this, OnMouseMove);
             Mouse.AddMouseWheelHandler(this, OnMouseWheel);
             PreviewKeyDown += MonoGameContentControl_PreviewKeyDown;
+        }
+
+        private void MonoGameContentControl_Drop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return;
+            }
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            _viewModel?.OnFileDrop(files);
         }
 
         private void MonoGameContentControl_PreviewKeyDown(object sender, KeyEventArgs e)
