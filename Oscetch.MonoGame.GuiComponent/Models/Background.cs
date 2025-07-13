@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Oscetch.MonoGame.Textures;
 using System.IO;
 
-namespace Oscetch.MonoGame.GuiComponent.DX.Models
+namespace Oscetch.MonoGame.GuiComponent.Models
 {
     public class Background
     {

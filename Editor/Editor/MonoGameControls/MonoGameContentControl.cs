@@ -33,6 +33,7 @@ namespace Editor.MonoGameControls
     public sealed class MonoGameContentControl : ContentControl, IDisposable
     {
         private readonly MonoGameGraphicsDeviceService _graphicsDeviceService = new();
+        private Window _window;
         private int _instanceCount;
         private IMonoGameViewModel _viewModel;
         private readonly GameTime _gameTime = new();
@@ -66,6 +67,15 @@ namespace Editor.MonoGameControls
             Mouse.AddMouseMoveHandler(this, OnMouseMove);
             Mouse.AddMouseWheelHandler(this, OnMouseWheel);
             PreviewKeyDown += MonoGameContentControl_PreviewKeyDown;
+        }
+
+        private Window Window
+        {
+            get
+            {
+                _window ??= Window.GetWindow(this);
+                return _window;
+            }
         }
 
         private void MonoGameContentControl_Drop(object sender, DragEventArgs e)
@@ -152,11 +162,10 @@ namespace Editor.MonoGameControls
             if(_isInitialized)
                 return;
 
-            if (Application.Current.MainWindow == null)
+            if (Window == null)
                 return;
-
-            Application.Current.MainWindow.Closing += (sender, args) => _viewModel?.OnExiting(this, EventArgs.Empty);
-            Application.Current.MainWindow.ContentRendered += (sender, args) =>
+            Window.Closing += (sender, args) => _viewModel?.OnExiting(this, EventArgs.Empty);
+            Window.ContentRendered += (sender, args) =>
             {
                 FirstLoad();
             };
@@ -169,7 +178,7 @@ namespace Editor.MonoGameControls
             CompositionTarget.Rendering += OnRender;
             _stopwatch.Start();
             _isInitialized = true;
-            if (Application.Current.MainWindow.IsLoaded)
+            if (Window.IsLoaded)
             {
                 FirstLoad();
             }
@@ -179,9 +188,10 @@ namespace Editor.MonoGameControls
         {
             if (_isFirstLoad)
             {
-                _graphicsDeviceService.StartDirect3D(Application.Current.MainWindow);
+                _graphicsDeviceService.StartDirect3D(Window);
                 _viewModel?.Initialize();
                 _viewModel?.LoadContent();
+                _graphicsDeviceService.DeviceResetting += OnGraphicsDeviceServiceDeviceResetting;
                 _isFirstLoad = false;
             }
         }
@@ -258,7 +268,6 @@ namespace Editor.MonoGameControls
 
             if (handle == IntPtr.Zero)
                 throw new ArgumentException("Handle could not be retrieved");
-
             _renderTargetD3D9 = new SharpDX.Direct3D9.Texture(_graphicsDeviceService.Direct3DDevice, renderTarget.Width,
                 renderTarget.Height,
                 1, SharpDX.Direct3D9.Usage.RenderTarget, SharpDX.Direct3D9.Format.A8R8G8B8,

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Oscetch.MonoGame.GuiComponent.DX.Models;
 using Oscetch.ScriptComponent;
 using System.Collections.Generic;
 using System.Linq;

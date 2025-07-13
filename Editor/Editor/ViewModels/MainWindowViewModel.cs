@@ -1,12 +1,17 @@
-﻿using Editor.Handlers;
+﻿using Editor.Extensions;
+using Editor.Handlers;
 using Editor.Modals;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using Oscetch.MonoGame.GuiComponent.Interfaces;
 using Oscetch.MonoGame.GuiComponent.Models;
+using Oscetch.ScriptComponent;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 
@@ -71,7 +76,7 @@ namespace Editor.ViewModels
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "JSON file(*.json)|*.json"
+                Filter = "GUI file(*.gui)|*.gui"
             };
             if (!(openFileDialog.ShowDialog() ?? false))
             {
@@ -99,49 +104,34 @@ namespace Editor.ViewModels
 
         private void OnTest()
         {
-            var settings = ProjectSettings.GetSettings();
-            if (settings.TestJsonPath == null)
-            {
-                MessageBox.Show("You must select the json output path");
-                return;
-            }
-            if (settings.TestExePath == null)
-            {
-                MessageBox.Show("You must select the test exe output path");
-                return;
-            }
+            var selectSceneDialog = new SelectSceneDialog();
+            if (selectSceneDialog.ShowDialog() != true) return;
+            var method = typeof(ScriptLoader).GetMethod("TryLoadBuiltInScriptReference", BindingFlags.Static | BindingFlags.Public);
+            var nonGeneric = method.MakeGenericMethod(selectSceneDialog.Selected.ToType());
+            var args = new object[] { selectSceneDialog.Selected, null, false };
+            bool ok = (bool)nonGeneric.Invoke(null, args);
+            if (!ok) return;
+            var scene = args[1];
+            var originalParameters = _editorViewModel.Parameters;
+            var testSceneWindow = new TestLayoutWindow(scene, [.. _editorViewModel.Parameters.ChildControls.Select(x => x.Copy())]);
+            testSceneWindow.ShowDialog();
+            (testSceneWindow.DataContext as TestLayoutWindowViewModel).Dispose();
+            var editorSettings = EditorSettings.Load();
 
-            var serialized = JsonConvert.SerializeObject(_editorViewModel.Parameters.ChildControls);
-            File.WriteAllText(settings.TestJsonPath, serialized);
-
-            var binTargetPath = Path.Join(Path.GetDirectoryName(settings.TestExePath), Path.GetFileName(settings.OutputPath));
-            File.Copy(settings.OutputPath, binTargetPath, true);
-
-            try
+            void OnContentLoaded(object sender, EventArgs e)
             {
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = settings.TestExePath,
-                        WorkingDirectory = Path.GetDirectoryName(settings.TestExePath),
-                    }
-                };
-
-                process.Start();
-                process.WaitForExit();
-            } 
-            catch(Exception exception)
-            {
-                MessageBox.Show(exception.Message);
-            }
+                _editorViewModel.ResetWithParameters(originalParameters);
+                _editorViewModel.OnContentLoaded -= OnContentLoaded;
+            };
+            _editorViewModel.OnContentLoaded += OnContentLoaded;
+            editorSettings.InvokeRecreateEditor();
         }
 
         private void OnSave()
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "JSON file(*.json)|*.json"
+                Filter = "GUI file(*.gui)|*.gui"
             };
             if (!(saveFileDialog.ShowDialog() ?? false))
             {
@@ -194,7 +184,7 @@ namespace Editor.ViewModels
         {
             var saveFileDialog = new SaveFileDialog
             {
-                Filter = "Canvas file (*.json)|*.json",
+                Filter = "GUI file(*.gui)|*.gui",
             };
             if (saveFileDialog.ShowDialog() != true) { return; }
             ProjectSettings.GetSettings().TestJsonPath = saveFileDialog.FileName;

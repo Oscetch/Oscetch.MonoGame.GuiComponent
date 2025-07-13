@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows;
 using System.Diagnostics;
 using System;
+using Oscetch.MonoGame.GuiComponent.Interfaces;
 using Oscetch.ScriptComponent.Interfaces;
 
 namespace Editor.Modals

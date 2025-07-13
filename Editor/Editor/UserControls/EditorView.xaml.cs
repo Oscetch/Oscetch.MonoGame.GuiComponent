@@ -16,7 +16,9 @@ namespace Editor.UserControls
         public EditorView()
         {
             InitializeComponent();
-            EditorSettings.Load().ProjectChanged += EditorView_ProjectChanged;
+            var settings = EditorSettings.Load();
+            settings.ProjectChanged += EditorView_ProjectChanged;
+            settings.RecreateEditor += EditorView_ProjectChanged;
             Loaded += EditorView_Loaded;
         }
 

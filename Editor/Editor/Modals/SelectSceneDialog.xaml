@@ -1,0 +1,17 @@
+﻿<Window x:Class="Editor.Modals.SelectSceneDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Editor.Modals"
+        mc:Ignorable="d"
+        Name="Window"
+        Title="Select Scene" Height="450" Width="800">
+    <ListBox ItemsSource="{Binding Scenes}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <Button Command="{Binding Command}" CommandParameter="{Binding ElementName=Window}" Content="{Binding Name}" />
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</Window>

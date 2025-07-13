@@ -6,7 +6,7 @@
     <Description>Library to act as a gui component for monogame</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" />
+    <PackageReference Include="nkast.Xna.Framework.Content.Pipeline" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Game" Version="4.1.9001" />
     <PackageReference Include="nkast.Xna.Framework.Graphics" Version="4.1.9001.1" />
     <PackageReference Include="Oscetch.MonoGame.Camera.kni" Version="1.0.0" />

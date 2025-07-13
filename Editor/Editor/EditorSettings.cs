@@ -45,9 +45,15 @@ namespace Editor
             ProjectChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        public void InvokeRecreateEditor()
+        {
+            RecreateEditor?.Invoke(this, EventArgs.Empty);
+        }
+
         public List<string> KnownProjectPaths { get; set; } = [];
         public string LastProjectPath { get; set; } = string.Empty;
 
         public event EventHandler ProjectChanged;
+        public event EventHandler RecreateEditor;
     }
 }

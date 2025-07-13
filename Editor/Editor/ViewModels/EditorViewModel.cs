@@ -852,6 +852,7 @@ namespace Editor.ViewModels
                 SpriteFont = fontPath
             }, null);
             OnReset?.Invoke(this, EventArgs.Empty);
+            OnContentLoaded?.Invoke(this, EventArgs.Empty);
         }
 
         public override void Draw(GameTime gameTime)
@@ -1015,5 +1016,6 @@ namespace Editor.ViewModels
         public event EventHandler SelectedControlChanged;
         public event EventHandler SelectedControlSizeUpdated;
         public event EventHandler SelectedControlPositionUpdated;
+        public event EventHandler OnContentLoaded;
     }
 }

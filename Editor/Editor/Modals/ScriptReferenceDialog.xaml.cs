@@ -34,24 +34,30 @@ namespace Editor.Modals
             {
                 ScriptReferenceCheckedModels.Add(new ScriptReferenceCheckedModel(currentReference, true));
             }
+            var scriptInterface = typeof(IScript);
 
             if (File.Exists(_settings.OutputPath))
             {
                 var outputFileName = Path.GetFileName(_settings.OutputPath);
-                var baseScriptReferenceName = Path.GetFileName(_settings.GameDllPath);
-                var baseScriptAssembly = Assembly.LoadFrom(_settings.GameDllPath);
-                baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.GameDllPath);
                 var assembly = Assembly.LoadFrom(_settings.OutputPath);
                 assembly.GetReferencedAssembliesAtPath(_settings.OutputPath);
 
-                var scriptInterface = typeof(IScript);
                 var assignableTypes = assembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
-                var builtInTypes = baseScriptAssembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface));
 
                 foreach (var type in assignableTypes) 
                 {
                     AddScriptReferenceCheckedModel(currentReferences, type, outputFileName);
                 }
+            }
+
+            if (File.Exists(_settings.GameDllPath))
+            {
+                var baseScriptReferenceName = Path.GetFileName(_settings.GameDllPath);
+                var baseScriptAssembly = Assembly.LoadFrom(_settings.GameDllPath);
+                baseScriptAssembly.GetReferencedAssembliesAtPath(_settings.GameDllPath);
+
+                var builtInTypes = baseScriptAssembly.GetTypes().Where(x => x.IsAssignableTo(scriptInterface)).Where(x => x.GetInterfaces().Any(y => y.Name == typeof(IGuiScript<>).Name));
+
                 foreach (var type in builtInTypes)
                 {
                     AddScriptReferenceCheckedModel(currentReferences, type, baseScriptReferenceName);
